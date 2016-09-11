@@ -1,0 +1,16 @@
+cas sso
+
+TGT(Ticket Granting Ticket)，TGT即代表了用户与认证中心直接的全局会话。TGT存在，表明该用户处于登录状态。
+
+TGC(Ticket Granting Cookie)，利用了Cookie存放了TGT的id,认证中心服务端实现了TGT。
+在认证中心登录下，看下登录前后cookie的变化。显然，在登录后，多出一个叫CASTGC的Cookie,它来维持全局会话。
+
+ST(Service Ticket)
+应用系统登录，会引导到认证中心进行登录，登录成功后再重定向回应用系统，这时会带上一个登录令牌，告知系统应用登录成功。 
+这个令牌，在CAS中叫做ST(Service Ticket)服务票据，应用系统收到ST后，会直接向CAS Server去验证，验证通过后，应用系统即可建立本地会话，返回用户访问的受限资源。
+
+
+
+
+
+
