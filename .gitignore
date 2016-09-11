@@ -6,7 +6,7 @@ node_modules/
 public/
 .deploy*/
 scaffolds
-# themes/
+themes/
 package.json
 
 
