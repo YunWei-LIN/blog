@@ -32,33 +32,33 @@ yum -y install tigervnc-server tigervnc
 根据远程桌面用户修改配置文件， 替换`<USER>`部分;
 Type改成`simple`，默认的`forking`可能导致服务启动失败。
 
-```
-[Unit]
-Description=Remote desktop service (VNC)
-After=syslog.target network.target
+	```
+	[Unit]
+	Description=Remote desktop service (VNC)
+	After=syslog.target network.target
 
-[Service]
-## Type=forking
-Type=simple
+	[Service]
+	## Type=forking
+	Type=simple
 
-# Clean any existing files in /tmp/.X11-unix environment
-ExecStartPre=/bin/sh -c '/usr/bin/vncserver -kill %i > /dev/null 2>&1 || :'
-## ExecStart=/usr/sbin/runuser -l <USER> -c "/usr/bin/vncserver %i"
-## PIDFile=/home/<USER>/.vnc/%H%i.pid
-ExecStart=/usr/sbin/runuser -l root -c "/usr/bin/vncserver %i"
-PIDFile=/root/.vnc/%H%i.pid
-ExecStop=/bin/sh -c '/usr/bin/vncserver -kill %i > /dev/null 2>&1 || :'
+	# Clean any existing files in /tmp/.X11-unix environment
+	ExecStartPre=/bin/sh -c '/usr/bin/vncserver -kill %i > /dev/null 2>&1 || :'
+	## ExecStart=/usr/sbin/runuser -l <USER> -c "/usr/bin/vncserver %i"
+	## PIDFile=/home/<USER>/.vnc/%H%i.pid
+	ExecStart=/usr/sbin/runuser -l root -c "/usr/bin/vncserver %i"
+	PIDFile=/root/.vnc/%H%i.pid
+	ExecStop=/bin/sh -c '/usr/bin/vncserver -kill %i > /dev/null 2>&1 || :'
 
-[Install]
-WantedBy=multi-user.target
-```
+	[Install]
+	WantedBy=multi-user.target
+	```
 
-* 更新systemctl
+### 更新systemctl
 ```
 systemctl daemon-reload
 ```
 
-* VNC密码
+### VNC密码
 设置对应远程桌面用户的VNC密码， 此密码不同于用户登录密码。
 ```
 vncserver

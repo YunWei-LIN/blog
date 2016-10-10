@@ -25,7 +25,7 @@ centOS 7 安装稳定版本如下：
 * user ： jenkins （查看passwd，获得工作路径）
 * Log file ： /var/log/jenkins/jenkins.log
 * configuration ： /etc/sysconfig/jenkins  (建议修改JENKINS_HOME到空间较大的路径)
-* 
+* 初始密码 ：查看 /var/log/jenkins/jenkins.log
 
 
 
@@ -107,15 +107,20 @@ bin/catalina.sh start
 
 
 	
-### 第一次ssh连接 gitServer
-Source Code Management 中 git 第一次ssh连接， 会有 `host error` 
-解决方法： jenkins 用户登录， 执行命令 `ssh git@gitServerIP`, 接受yes 。
+
 
 
 
 
 
 ## 问题
+### 第一次ssh连接 gitServer
+Source Code Management 中 git 第一次ssh连接， 会有 `host error` 
+解决方法： 
+  * jenkins 用户登录， `/etc/passwd` 中 jenkins用户的默认shell 需要修改成 `bin/bash`
+  * 执行命令 `ssh git@gitServerIP`, 接受yes
+  * 还原 jenkins用户的默认shell为 `bin/false`
+
 ### 网络导致日志疯狂增长
 一旦jenkins所在的服务器的网络出现问题， jenkins的日志文件（/var/log/jenkins/jenkins.log）大小会疯狂快速增长，直到撑爆硬盘
 日志内容大概为
