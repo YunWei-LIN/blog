@@ -15,6 +15,8 @@ categories: linux
 ## 环境准备
 ### zsh
 ```
+  echo $SHELL  #查看系统当前的shell
+
   yum install zsh
   
   cat /etc/shells #查看本地所有的shell
