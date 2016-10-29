@@ -141,6 +141,8 @@ $ npm install hexo-generator-sitemap -g  --save
 giveme5.top
 ```
 
+## 主题
+目前来说 [NexT](http://theme-next.iissnan.com/getting-started.html#description-setting)这个主题最符合我的口味。
 
 ## 藏在最后
 这是第一篇，我想这个作为笔记，有需要就可以拿出来看看，省得记载纸上找不到；所以这个大概是给自己看的。
