@@ -90,7 +90,7 @@ shadowsocks是socks5服务，在浏览器里使用一些插件可以满足浏览
       forward-socks5t / 127.0.0.1:1080 .
 
 * 启动
-编辑完成， copy 一份`config` 到 sbin目录下, 启动
+编辑完成， copy 一份`config` 到 sbin目录下, 切换到sbin目录， 启动
 
       ./privoxy
 
