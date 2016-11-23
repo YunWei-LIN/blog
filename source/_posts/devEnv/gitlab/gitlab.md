@@ -96,3 +96,54 @@ Windows: `C:\Users\你的用户\.ssh`
 
 
 版本操作完全是git的内容。Linux的话直接命令行就很好了； Windows的话 推荐 [SourceTree](https://www.sourcetreeapp.com/) or [smartgit](http://www.syntevo.com/smartgithg/)
+
+
+## 备份迁移
+
+下面都是yum方式安装gitlab的用法, 工作目录都是 `gitlab.rb` 设置的 `gitlab_rails['backup_path']`； 完整的参考[官方指南](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md).
+
+### 备份
+		sudo gitlab-rake gitlab:backup:create
+
+### 自动备份
+使用`crontab`每日自动备份
+* schedule a cron job
+		sudo su -
+		crontab -e
+  
+* backup (每天凌晨2点)
+		0 2 * * * /usr/bin/gitlab-rake gitlab:backup:create CRON=1
+  
+* 备份有效时间
+`/etc/gitlab/gitlab.rb`内配置
+		# limit backup lifetime to 7 days - 604800 seconds
+		gitlab_rails['backup_keep_time'] = 604800
+
+
+
+### 恢复
+```
+# 1 copy 备份文件
+sudo cp 1393513186_gitlab_backup.tar /var/opt/gitlab/backups/
+  
+# 2 Stop the processes that are connected to the database. Leave the rest of GitLab running
+sudo gitlab-ctl stop unicorn
+sudo gitlab-ctl stop sidekiq
+# Verify
+sudo gitlab-ctl status
+  
+# 3 restore
+#will overwrite the contents of your GitLab database!!!!!
+sudo gitlab-rake gitlab:backup:restore BACKUP=1393513186
+  
+# 4 Restart and check GitLab
+sudo gitlab-ctl start
+sudo gitlab-rake gitlab:check SANITIZE=true
+```
+
+
+
+
+
+
+
