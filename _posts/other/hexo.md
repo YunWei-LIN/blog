@@ -30,7 +30,7 @@ GitHub Pages分两种，一种是你的GitHub用户名建立的username.github.i
 
 ### 安装Hexo
 ``` bash
-$ npm install -g hexo
+$ npm install -g hexo-cli
 ```
 
 ### 初始化
@@ -113,7 +113,7 @@ deploy
 ### RSS
 安装
 ``` bash
-$ npm install hexo-generator-feed -g  --save   
+$ npm install hexo-generator-feed   --save   
 ```
 
 配置
@@ -125,11 +125,25 @@ Rss: /atom.xml
 ### sitemap
 安装
 ``` bash
-$ npm install hexo-generator-sitemap -g  --save   
+$ npm install hexo-generator-sitemap   --save   
 ```
 
 配置
 参考 hexo 设置
+
+
+### hexo-util
+Next主题需要
+安装
+
+            npm install hexo-util  --save
+            
+### github pages
+上传到 github pages 需要
+安装
+
+        npm install hexo-deployer-git --save
+        
 
 ## 多说
 去[多说](http://duoshuo.com/) 注册个账户，然后建立个应用；
