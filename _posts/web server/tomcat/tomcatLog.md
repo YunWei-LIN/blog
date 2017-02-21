@@ -9,7 +9,7 @@ tomcat的catalina.out会不断增长，很麻烦，看了多张解决方案，�
 
 <!-- more -->
 
-## cronolog 安装
+## cronolog
 
 ### 环境
 ```
@@ -22,6 +22,10 @@ CentOS release 5.4 (Final)
 ```
 # mv /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.backup 
 # wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+```
+
+### 安装cronolog
+```
 # yum install -y cronolog
 ```
 
