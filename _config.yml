@@ -65,6 +65,10 @@ pagination_dir: page
 Plugins:
   - hexo-generator-feed 
   - hexo-generator-sitemap
+  - hexo-generator-baidu-sitemap
+
+baidusitemap:
+    path: baidusitemap.xml
 
 #Feed Atom
 feed:
