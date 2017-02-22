@@ -1,6 +1,8 @@
 title: Android入门 一 ： unit test
 date: 2016-5-10 19:29:44
-tags: Android junit
+tags: 
+ - android
+ - junit
 categories: Android
 ---
 

@@ -1,6 +1,8 @@
 title: Android broadcast
 date: 2016-05-17 22:28:38
-tags: Android broadcast
+tags: 
+ - android
+ - broadcast
 categories: Android
 ---
 

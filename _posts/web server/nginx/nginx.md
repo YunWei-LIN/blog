@@ -1,6 +1,6 @@
 title: nginx
 date: 2016-01-22 10:48:42
-tags: server nginx
+tags: nginx
 categories: server
 ---
 主要内容

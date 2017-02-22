@@ -1,6 +1,8 @@
 title: tomcat  日志分割
 date: 2017-02-21 17:07:07
-tags: tomcat log
+tags: 
+ - tomcat
+ - cronolog
 categories: server
 ---
 
