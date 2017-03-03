@@ -28,7 +28,7 @@ categories: server
 ## 环境
 
 主要以Centos为例。
-```
+```sh
 # cat /etc/redhat-release
 CentOS release 5.4 (Final)
 ```
@@ -42,7 +42,7 @@ CentOS release 5.4 (Final)
 
 ### server
 
-```
+```nginxconf
 server
 {
         listen       443 ssl;
@@ -95,7 +95,7 @@ server
 ## tomcat配置
 主要配置 `server.xml`
 
-```
+```xml
 <?xml version='1.0' encoding='utf-8'?>
 <Server port="8005" shutdown="SHUTDOWN">
   <Service name="Catalina">

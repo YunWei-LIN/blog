@@ -92,7 +92,7 @@ Build
 其他 参照上方， 
 Post Steps --> Excute shell (启动tomcat等Web server)
 shell可能长的像下面这样
-```
+```sh
 #!/bin/bash -ex
 JAVA_OPTS="-Xms768m -Xmx1000m -XX:PermSize=512m -XX:MaxPermSize=1024m"
 cd /data/apache-tomcat/
@@ -108,7 +108,8 @@ bin/catalina.sh start
 
 	
 
-
+## 项目权限
+[项目权限](/2017/03/03/devEnv/ci/jenkinsRole/)
 
 
 

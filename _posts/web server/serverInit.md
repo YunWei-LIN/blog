@@ -1,6 +1,6 @@
 title: linux server 配置选项
 date: 2016-11-18 19:29:44
-tags: linux server
+tags: [linux, server]
 categories: server
 ---
 

@@ -14,27 +14,27 @@ tomcat的catalina.out会不断增长，很麻烦，看了多张解决方案，�
 ## cronolog
 
 ### 环境
-```
+```sh
 # cat /etc/redhat-release
 CentOS release 5.4 (Final)
 ```
 
 ### 安装yum源
 
-```
+```sh
 # mv /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.backup 
 # wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
 ```
 
 ### 安装cronolog
-```
+```sh
 # yum install -y cronolog
 ```
 
 
 查看cronolog安装后所在目录（验证安装是否成功）
 
-```
+```sh
 # which cronolog
 正常情况下显示：
 /usr/sbin/cronolog
@@ -47,7 +47,7 @@ CentOS release 5.4 (Final)
 大概213行
 将
 
-```
+```sh
 if [ -z "$CATALINA_OUT" ] ; then
 
 CATALINA_OUT="$CATALINA_BASE"/logs/catalina.out
@@ -57,7 +57,7 @@ fi
 
 修改为
 
-```
+```sh
 if [ -z "$CATALINA_OUT" ] ; then
 
 CATALINA_OUT="$CATALINA_BASE"/logs/catalina.%Y-%m-%d.out
@@ -69,12 +69,12 @@ fi
 大概414行左右
 将
 
-```
+```sh
 touch "$CATALINA_OUT"
 ```
 
 改为
-```
+```sh
 #touch "$CATALINA_OUT"
 ```
 
@@ -82,14 +82,14 @@ touch "$CATALINA_OUT"
 大概 436～437
 将
 
-```
+```sh
 org.apache.catalina.startup.Bootstrap "$@" start \
 >> "$CATALINA_OUT"  2>&1 "&"
 ```
 
 修改为
 
-```
+```sh
 org.apache.catalina.startup.Bootstrap "$@" start 2>&1 \
 | /usr/sbin/cronolog "$CATALINA_OUT" >> /dev/null &
 ```

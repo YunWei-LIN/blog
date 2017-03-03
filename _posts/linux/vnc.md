@@ -1,7 +1,7 @@
 
 title: centos vnc远程桌面
 date: 2016-10-10 19:29:44
-tags: linux vnc
+tags: [linux, vnc]
 categories: linux
 ---
 主要内容
