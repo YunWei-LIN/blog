@@ -8,7 +8,9 @@ categories: hadoop
 
 主要内容
 * 安装 Hive
-* 
+* 概念
+* Hive 脚本
+* 整合 MapReduce
 
 Hive 就是 Hadoop 平台的开源数据仓库， HiveQL 就是基于 HDFS 系统的 SQL 引擎， Hive 转换成多阶段的 MapReduce 任务。
 
