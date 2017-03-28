@@ -1,7 +1,7 @@
 ---
 title: linux wine 32 & 64
 date: 2016-10-29 13:00:10
-tags: wine
+tags: [linux, wine]
 categories: linux
 ---
   wine在linux中很常用，目前是32位和64位的软件都有；在此讨论在64位centos 7中安装32位和64位的wine。
