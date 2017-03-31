@@ -341,6 +341,7 @@ UserEntity
 + @Api:标志这个类为Swagger资源
 + @ApiImplicitParam:对单个参数进行说明,其中dataType一定为小写
 + @ApiOperation:描述了一种操作或通常针对特定的路径的HTTP方法。
++ @ApiModel: 描述一个实体
 + @ApiModelProperty：描述一个字段
 
 >[更多注解 官方说明](https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X)
