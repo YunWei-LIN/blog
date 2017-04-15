@@ -109,9 +109,10 @@ plugins=(git git-flow git-flow-completion )
 [jenkins](/tags/jenkins/)
 
 
+## [nginx](/2016/01/22/web server/nginx/nginx/)
 
 
-
+## [mysql](/categories/mysql/)
 
 
 
