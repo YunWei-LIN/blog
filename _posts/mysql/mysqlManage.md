@@ -1,4 +1,4 @@
-title: 【mysql 管理之道】读书笔记
+title: 【mysql 管理之道】读书笔记一
 date: 2017-4-15 12:53:57
 tags: mysql
 categories: mysql
@@ -13,6 +13,7 @@ MySQL5.7新特性
 高可用架构
 
 拜读 贺春旸先生 的 【mysql 管理之道】 有感， 特此梳理和记录。
+本篇主要包括MySQL5.7新特性
 
 <!-- more -->
 
@@ -78,13 +79,39 @@ MySQL 5.7 版本支持 原生的 JSON 格式，将关系型数据库和文档型
 [JSON FUNCTION](https://dev.mysql.com/doc/refman/5.7/en/json-function-reference.html)
 
 ### 函数索引
+虚拟列方式支持函数索引
 
 ### 功能提升
 * 一张表多个 insert/delete/update  触发器
 
+* 支持 explain update
+
+* Ctrl + C 组合键不会退出客户端
+
+### 优化器改进
+* 子查询select 采用半连接优化
+* 优化排序 limit
+* 优化IN条件
+* 支持 Multi Range Read 优化
+	大表进行范围扫描，通过 MRR 优化减少随机I/O
+	可以通过 `show variables like 'optimizer_switch'; ` 来查看是否开启 MRR。
+
+### 半同步复制改进
+复制功能默认是异步的， 异步复制可以提供最佳性能， 主库把 Binlog 日志发给从库， 这一动作就完成了， 并不验证从库是否接收完毕。
+从库可能没有接收，从而导致复制数据丢失。
+半同步复制模式，可以确保从服务器接收完主服务器发送的 Binlog 日志文件并写入自己的中继日志（relay log）里， 然后给主服务器一个反馈， 这是主服务器才结束操作。
+需要主从服务端都开启半同步模式。
+
+### GTID 全局事务标识符
+由uuid和事务id 组成。 主从切换后，同步失败，MySQL 可以通过GTID 自动找点同步。 需要主从都开启。
+
+### salve 支持多源复制
+多主一从
+
+### 同步复制过滤不用重启 mysql 服务进程
 
 
-## 故障处理
+## 故障诊断
 
 
 
