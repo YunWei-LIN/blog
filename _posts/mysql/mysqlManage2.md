@@ -13,7 +13,7 @@ MySQL5.7新特性
 高可用架构
 
 拜读 贺春旸先生 的 【mysql 管理之道】 有感， 特此梳理和记录。 主要适合 MySQL 5.6， MySQL 5.7.
-本篇主要包括故障诊断，性能调优， 备份和恢复。
+本篇为第二篇， 主要包括故障诊断，性能调优， 备份和恢复。
 
 <!-- more -->
 ## 故障诊断
@@ -137,10 +137,69 @@ oracle 和 SQL server 的默认隔离级别 是 read committed； MySQL 的默�
 
 ### my.cnf 配置文件调优
 page231
+per_thread_buffers + global_buffer 不能大于物理内存
 
+#### per_thread_buffers 
+可以理解为 oracle 的 PGA， 为每个连接到 MySQL 的用户分配的内存。
+per_thread_buffers = (read_buffer_size + read_rnd_buffer_size + sort_buffer_size + thread_stack + join_buffer_size + binlog_cache_size) * max_connections
+
++ read_buffer_size
+用于表的顺序扫描，表示每个线程分配的缓冲区大小。默认128KB， 一般在128 ～ 256KB
++ read_rnd_buffer_size
+用于表的随机读取，表示每个线程分配的缓冲区大小。64位默认256KB， 一般在128 ～ 256KB
++ sort_buffer_size
+在表进行 order by 和 group by 排序操作时， 由于排序没有索引， 会出现 Using filesort， 可用此参数增加每个线程分配的缓冲区大小， 64位默认256KB，一般在128 ～ 256KB， 如果出现 filesort，可增加索引。
++ thread_stack
+表示每个线程的堆栈大小。64位默认256KB
++ join_buffer_size
+表进行join时，如果没有索引，会出现 Using join buffer， 可用此参数增加每个线程分配的缓冲区大小，64位默认256KB，一般在128 ～ 256KB， 如果出现 Using join buffer，可增加索引。
++ binlog_cache_size
+一般来说， 如果数据库没有特别大事务， 写入也不是特频繁，将其设置为1 ～ 2MB, 默认32KB
++ max_connections
+该参数设置最大连接数， 默认为100, 一般设置为 500 ～ 1000.
+
+#### global_buffer
+可以理解为 oracle 的 SGA， 用于在内存中缓存从数据文件检索出来的数据块。
+global_buffer= innodb_buffer_pool_size + innodb_additional_mem_pool_size + innodb_log_buffer_size + key_buffer_size + query_cahce_size
+
++ innodb_buffer_pool_size
+InnoDB 存储引擎的核心数据， 默认128MB， 建议设置成物理内存的 60% ~ 70%
+
++ innodb_additional_mem_pool_size
+设置存储数据字典信息和其他内部数据结构。表越多， 需要这里分配的内存越多， 单位是 byte，参数默认值为8M。如果 InnoDB 用完了内存池中的内存，就会从操作系统中分配内存，同时在 error log 中打入报警信息。
+从 MySQL 5.7.4 中移除， InnoDB 实现的内存分配器相比操作系统的内存分配器并没有明显优势，所以在之后的版本，会移除 innodb_additional_mem_pool_size 和 innodb_use_sys_malloc 两个参数，统一使用操作系统的内存分配器。
+
++ innodb_log_buffer_size
+事务日志所使用缓冲区。默认16M， 一般设置16M ～ 64MB
+
++ key_buffer_size
+MyISAM 存储引擎的索引参数
+
++ query_cahce_size
+缓存select 语句和结果集大小的参数。
+如果写操作很少，读操作频繁， 那么打开 query_cahce_type=1, 并设置 query_cahce_size 16M， 看情况调试。
+反之写操作很频繁，读操作少， 那么打开 query_cahce_type=0, query_cahce_size=0
 
 ## 备份和恢复
+### 冷备份
+#### 备份
++ 关闭mysql
++ 复制 数据目录（包括 ibdata1） 和 日志目录 （包括 ib_logfile0, ib_logfile1, ib_logfile2)
 
+#### 恢复
++ 拷贝上步的数据目录和日志目录
++ 启动mysql
+
+### 逻辑备份
+mysqldump
+mydumper 
+
+全量，增量备份脚本 page262
+
+
+### 热备份
+xtrabackup - 相对完美的免费开源数据备份工具
+page 263
 
 
 
