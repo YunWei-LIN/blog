@@ -90,10 +90,13 @@ plugins=(git git-flow git-flow-completion )
 * 禁止密码登录
 [ssh](/2016/01/26/linux/service/2-1%20sshd/)
 
+## firewall
+[firewall](http://giveme5.cc/2017/03/28/linux/Firewalld-md/)
+
 
 ## 防暴力破解
 使用 `fail2ban` 防止暴力破解， 将对方IP放入防火墙.
-
+[fail2ban](http://giveme5.cc/2017/03/28/linux/fail2ban-md/)
 
 ## VNC
 [VNC](/2016/10/10/linux/vnc/)
