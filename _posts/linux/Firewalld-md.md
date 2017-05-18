@@ -147,3 +147,4 @@ systemctl disable firewalld       # 取消开机启动
 [CentOS 7 Firewalld 防火牆說明介紹](http://blog.xuite.net/tolarku/blog/363801991-CentOS+7+Firewalld+%E9%98%B2%E7%81%AB%E7%89%86%E8%AA%AA%E6%98%8E%E4%BB%8B%E7%B4%B9)
 [CentOS 7 下使用 Firewall](https://havee.me/linux/2015-01/using-firewalls-on-centos-7.html)
 [fedora FirewallD](https://fedoraproject.org/wiki/FirewallD)
+[redhat 安全](https://access.redhat.com/documentation/zh-CN/Red_Hat_Enterprise_Linux/7/html/Security_Guide/sec-Using_Firewalls.html)
