@@ -140,6 +140,9 @@ systemctl disable firewalld       # 取消开机启动
     firewall-cmd --zone=public --add-port=8080/tcp --permanent
     firewall-cmd --zone=public --remove-port=8080/tcp --permanent
 
+## rule 自定义规则
+[自定义规则 直接选项](http://jevic.blog.51cto.com/2183736/1785162)
+    
 ## 参考资料
 [CentOS 7 Firewalld 防火牆說明介紹](http://blog.xuite.net/tolarku/blog/363801991-CentOS+7+Firewalld+%E9%98%B2%E7%81%AB%E7%89%86%E8%AA%AA%E6%98%8E%E4%BB%8B%E7%B4%B9)
 [CentOS 7 下使用 Firewall](https://havee.me/linux/2015-01/using-firewalls-on-centos-7.html)
