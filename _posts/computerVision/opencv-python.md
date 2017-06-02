@@ -195,11 +195,11 @@ cmake 会停留在 如下类似位置：
 检查 python相关环境是否一致， 类似如下
 
     ```sh
-    Python 2:
-        Interpreter:                 /usr/local/bin/python2.7 (ver 2.7.11)
-        Libraries:                   /usr/local/lib/libpython2.7.so (ver 2.7.11)
-        numpy:                       /usr/local/lib/python2.7/site-packages/numpy/core/include (ver 1.10.1)
-        packages path:               /usr/local/lib/python2.7/site-packages
+--   Python 2:
+--     Interpreter:                 /usr/bin/python2.7 (ver 2.7.5)
+--     Libraries:                   /lib64/libpython2.7.so (ver 2.7.5)
+--     numpy:                       /usr/lib64/python2.7/site-packages/numpy/core/include (ver 1.12.1)
+--     packages path:               lib/python2.7/site-packages
     ```
 
     可以通过 图像工具 `cmake-gui` 来调整
