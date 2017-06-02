@@ -210,6 +210,16 @@ cmake 会停留在 如下类似位置：
 #### make
 ```sh
 make -j4 # 4是你的电脑cpu线程
+```
+查看输出日志
+```sh
+Linking CXX shared module ../../lib/cv2.so
+。。。
+Built target opencv_python2
+```
+基本代表 opencv python `make` 成功， 如果没有， 使用 `cmake-gui ..` 重新 `make` 一次
+#### make install
+```sh
 make install
 ldconfig
 ```
