@@ -125,7 +125,13 @@ yum install python-devel
 #### numpy
 ```py
 pip install numpy
+
+pip install matplotlib 
+yum install tkinter
+pip install scipy
 ```
+
+`matplotlib` `scipy` 是非必须的，但使用opencv python 肯定用的着，所以建议一起安装好。 `tkinter` 是 `matplotlib` 的依赖
 
 ## Opencv3.2 源码安装
 工作目录为 `～`， 按照你的喜爱调整，记得下面的目录都要调整
