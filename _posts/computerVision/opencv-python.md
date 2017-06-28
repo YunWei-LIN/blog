@@ -125,7 +125,13 @@ yum install python-devel
 #### numpy
 ```py
 pip install numpy
+
+pip install matplotlib 
+yum install tkinter
+pip install scipy
 ```
+
+`matplotlib` `scipy` 是非必须的，但使用opencv python 肯定用的着，所以建议一起安装好。 `tkinter` 是 `matplotlib` 的依赖
 
 ## Opencv3.2 源码安装
 工作目录为 `～`， 按照你的喜爱调整，记得下面的目录都要调整
@@ -195,11 +201,11 @@ cmake 会停留在 如下类似位置：
 检查 python相关环境是否一致， 类似如下
 
     ```sh
-    Python 2:
-        Interpreter:                 /usr/local/bin/python2.7 (ver 2.7.11)
-        Libraries:                   /usr/local/lib/libpython2.7.so (ver 2.7.11)
-        numpy:                       /usr/local/lib/python2.7/site-packages/numpy/core/include (ver 1.10.1)
-        packages path:               /usr/local/lib/python2.7/site-packages
+        --   Python 2:
+        --     Interpreter:                 /usr/bin/python2.7 (ver 2.7.5)
+        --     Libraries:                   /lib64/libpython2.7.so (ver 2.7.5)
+        --     numpy:                       /usr/lib64/python2.7/site-packages/numpy/core/include (ver 1.12.1)
+        --     packages path:               lib/python2.7/site-packages
     ```
 
     可以通过 图像工具 `cmake-gui` 来调整
@@ -210,6 +216,16 @@ cmake 会停留在 如下类似位置：
 #### make
 ```sh
 make -j4 # 4是你的电脑cpu线程
+```
+查看输出日志
+```sh
+Linking CXX shared module ../../lib/cv2.so
+。。。
+Built target opencv_python2
+```
+基本代表 opencv python `make` 成功， 如果没有， 使用 `cmake-gui ..` 重新 `make` 一次
+#### make install
+```sh
 make install
 ldconfig
 ```
