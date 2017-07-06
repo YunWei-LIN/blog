@@ -288,4 +288,8 @@ cp -R themes/ /mnt/boot/grub2/
 ```
 
 `themes` 请参考 [Feng_Yu的](http://git.oschina.net/abcfy2/grub-cfg)
+
+
+## 参考
+[Multiboot USB drive](https://wiki.archlinux.org/index.php/Multiboot_USB_drive)
  
