@@ -1,19 +1,18 @@
-title: shadowsocks
+title: ss
 date: 2016-05-05 11:44:58
-tags: shadowsocks
+tags: shadowsssocks
 categories: 杂谈
 ---
-
-关键词不说了， 知道ss的人就好，哈哈
+shadowsssocks 是错误的单词， 改成正确的再看
 
 <!-- more -->
 
 
-## shadowsocks 安装
+## shadowsssocks 安装
 python版本安装
 
 ```
-pip install shadowsocks
+pip install shadowsssocks
 ```
 
 ## server 配置
@@ -22,7 +21,7 @@ pip install shadowsocks
 ## 启动
 写了几个脚本，内容有点像这样的
 
-* shadowsocks.sh
+* shadowsssocks.sh
 ```
 #!/bin/bash
 cmd=$1
@@ -30,14 +29,14 @@ cmd=$1
 # start
 if [ $cmd == "start" ]
 then
-  echo 'password' | sudo -S sslocal -c /xxxxxx/shadowsocks/gui-config.json -d start 
-  #xxxxxx/shadowsocks 是 gui-config.json 的存放位置， gui-config.json 是上步的server配置信息
+  echo 'password' | sudo -S sslocal -c /xxxxxx/shadowsssocks/gui-config.json -d start 
+  #xxxxxx/shadowsssocks 是 gui-config.json 的存放位置， gui-config.json 是上步的server配置信息
   #password 是你自己系统管理员密码，记得修改哦
   
 #stop
 elif [ $cmd == "stop" ]
 then
-  echo 'password' | sudo -S sslocal -c /xxxxxx/soft/shadowsocks/gui-config.json -d stop
+  echo 'password' | sudo -S sslocal -c /xxxxxx/soft/shadowsssocks/gui-config.json -d stop
 
 # error
 else
@@ -46,10 +45,10 @@ fi
 ```
 
 * 启动命令
-`./shadowsocks.sh start`
+`./shadowsssocks.sh start`
 
 ## http 全局代理
-shadowsocks是socks5服务，在浏览器里使用一些插件可以满足浏览器使用了。一些其他场合，Privoxy实现Socks5转换为Http 服务。
+shadow  sock   s是socks5服务，在浏览器里使用一些插件可以满足浏览器使用了。一些其他场合，Privoxy实现Socks5转换为Http 服务。
 
 ### Privoxy
 
@@ -82,7 +81,7 @@ shadowsocks是socks5服务，在浏览器里使用一些插件可以满足浏览
       listen-address 127.0.0.1:8118  
   查找`listen-address`， 端口可以修改
     
-  shadowsocks 端口，（查找 关键字 forward-socks5t） 默认是这样的
+  shadowsssocks 端口，（查找 关键字 forward-socks5t） 默认是这样的
       # forward-socks5t / 127.0.0.1:9050 .
 	
       修改成 ==> 
@@ -113,6 +112,4 @@ export HTTP_PROXY HTTPS_PROXY FTP_PROXY http_proxy https_proxy ftp_proxy
 然后 `source` 下。
 
 ### 测试
-访问下 gg，哈哈
-
-      curl google.com
+访问下 gg
