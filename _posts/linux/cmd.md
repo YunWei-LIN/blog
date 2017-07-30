@@ -128,5 +128,17 @@ sudo zypper install libxine2-codecs
 `lastb`
 `lastlog`
 `history`
-`/var/log/secure` : 登录的ssh公钥签名可以通过 `ssh-keygen -l -f xxx.pub` 获得 
-`远程日志服务`
+`/var/log/secure` : 登录的ssh公钥签名可以通过 `ssh-keygen -l -f xxx.pub` 获得 `远程日志服务`
+
+### 网络实时流量监测 iftop
+单服务器
+
+### 网络流量监控与分析 Ntop 和 Ntopng
+
+### 网络性能评估 iperf
+
+### rootkit 检测工具
++ chkrootkit
++ RKHunter
+
+
