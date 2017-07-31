@@ -7,13 +7,13 @@ categories: java
 
 ___主要内容___
 
-I/O 就是数据的输入/输出。 Java 平台提供了丰富的类库来满足可能的I/O操作需求。
-最初的java.io包， JDK 1.4 的 NIO， JDK 7 的 NIO.2。
-最早的java.io包把IO操作抽象成数据的流动，进而有了流(Stream)概念；
-Java NIO中把IO操作抽象成端到端的一个数据连接，进而有了通道(channel)概念。
-如果需要开发高性能网络应用， Java提供的标准库所支持的抽象层次过低， 推荐Netty。
+　　I/O 就是数据的输入/输出。 Java 平台提供了丰富的类库来满足可能的I/O操作需求。最初的java.io包， JDK 1.4 的 NIO， JDK 7 的 NIO.2。
+　　
+　　最早的java.io包把IO操作抽象成数据的流动，进而有了流(Stream)概念；Java NIO中把IO操作抽象成端到端的一个数据连接，进而有了通道(channel)概念。
+  
+　　如果需要开发高性能网络应用， Java提供的标准库所支持的抽象层次过低， 推荐Netty。
 
-JDK 7 后都建议用 try-with-resources来使用流和通道。
+　　JDK 7 后都建议用 try-with-resources来使用流和通道。
 
 <!-- more -->
 
@@ -102,7 +102,7 @@ java.io.BufferedReader 类 和 java.io.BufferedWriter 类
 
 缓冲区同样也支持标记 mark 和重置 reset 的特性。
 
-任何时候 `0 <= 标记位置 <= 读写位置 <= 读写限制 <= 容量`  656404562
+任何时候 `0 <= 标记位置 <= 读写位置 <= 读写限制 <= 容量`
 
 java.nio.Buffer 类是所有不同数据类型的缓冲区的父类。
 + clear方法
@@ -119,10 +119,12 @@ java.nio.Buffer 类是所有不同数据类型的缓冲区的父类。
 
 ### 字节缓冲区
 java.nio.ByteBuffer 类
-只能通过其静态工厂方法 allocate 来分配新空间, 或者通过 wrap 方法来包装一个已有的字节数组。
-必须要考虑字节顺序，同样的字节序列按照不同的顺序去解释,所得到的结果是不同的。
-java.nio.ByteOrder 类中定义了两种最基本的字节顺序 :BIG_ENDIAN 对应的大端表示和 LITTLE_ENDIAN 对应的小端表示。
-大端表示的含义是字节序列中高位在前,而小端表示则正好相反。ByteOrder类中的静态方法 nativeOrder 可以获取到底层操作系统平台采用的字节顺序。ByteBuffer 类的对象默认使用的是大端表示。
+
+　　只能通过其静态工厂方法 allocate 来分配新空间, 或者通过 wrap 方法来包装一个已有的字节数组。
+  
+　　必须要考虑字节顺序，同样的字节序列按照不同的顺序去解释,所得到的结果是不同的。java.nio.ByteOrder 类中定义了两种最基本的字节顺序 :BIG_ENDIAN 对应的大端表示和 LITTLE_ENDIAN 对应的小端表示。
+  
+　　大端表示的含义是字节序列中高位在前,而小端表示则正好相反。ByteOrder类中的静态方法 nativeOrder 可以获取到底层操作系统平台采用的字节顺序。ByteBuffer 类的对象默认使用的是大端表示。
 
 ### 缓冲区视图
 ByteBuffer 类的另外一个常见的使用方式是在一个已有的 ByteBuffer 类的对象上创建出各种不同的视图。这些视图和它所基于的 ByteBuffer 类的对象共享同样的存储空间,但是提供额外的实用功能。在功能上,ByteBuffer 类的视图与它所基于的 ByteBuffer 类的对象之间的关系类似于过滤流和它所包装的流的关系。
