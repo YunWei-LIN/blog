@@ -1,12 +1,15 @@
 
 title: centos vnc远程桌面
-date: 2016-10-10 19:29:44
+date: 2017-8-7 11:29:44
 tags: [linux, vnc]
 categories: linux
 ---
-主要内容
+## 主要内容
 大部分情况下Linux的系统管理员都是通过SSH完成管理任务，特殊情况下可能会需要图形会话。VNC服务器就是这样一个自由开源软件，他可以让用户远程访问服务器的桌面环境。
 下面就是关于CentOS 7 上配置VNC服务的内容。
+
+*更新历史*
+2017-8-7 增加相关路径说明
 
 <!-- more -->
 
@@ -78,6 +81,11 @@ systemctl start vncserver@:1.service
 systemctl enable vncserver@:1.service
 ```
 
+## 相关路径
+`PIDFile` `logFile` 都由 配置文件 指定; 如上的配置文件， 这2个文件都在 `/root/.vnc/` 中
+临时文件在 `/tmp/.X11-unix/Xn` 中， n 同 配置文件的含义。
+
+如果vnc 服务启动异常， 可将上面3个文件都清除， 然后重新启动。
 
 ## 其他
 ### 其他命令
