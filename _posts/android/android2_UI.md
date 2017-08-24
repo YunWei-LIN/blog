@@ -1,6 +1,6 @@
-title: Android入门 图谱
-date: 2017-8-22 19:29:44
-tags: [android, Android]
+title: Android UI
+date: 2017-8-24 23:29:44
+tags: [android, Android, UI, Material Design]
 categories: Android
 ---
 
@@ -21,7 +21,7 @@ Android UI
 
 #### *material design* 
 + `AppBarLayout` 实际上是一个垂直方向的LinearLayout， AppBarLayout接收到滚动事件的时候,它内部的子控件可以指定通过app:layout_scrollFlags 属性去影响这些事件的
-如 scroll|enterAlways|snap 。其中,scroll 表示当RecyclerView向上滚动的时候,Toolbar会跟着一起向上滚动并实现隐藏;enterAlways 表示当RecyclerView向下滚动的时候,Toolbar会跟着一起向下滚动并重新显示。snap 表示当Toolbar还没有完全隐藏或显示的时候,会根据当前滚动的距离,自动选择是隐藏还是显示。
+如 scroll|enterAlways|snap 。其中,scroll 表示当向上滚动的时候,Toolbar会跟着一起向上滚动并实现隐藏;enterAlways 表示当向下滚动的时候,Toolbar会跟着一起向下滚动并重新显示。snap 表示当Toolbar还没有完全隐藏或显示的时候,会根据当前滚动的距离,自动选择是隐藏还是显示。
 
 ### 相对布局
 
@@ -274,7 +274,8 @@ group表示一个组，checkableBehavior 指定为single 表示组中的所有�
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">“<FrameLayout
+    android:layout_height="match_parent">
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -433,8 +434,8 @@ Snackbar可能将我们的悬浮按钮给遮挡住, 可以使用CoordinatorLayou
 
 ### 卡片式布局
 列表 内卡片式 布局 ， 涉及以下控件：
-+ CoordinatorLayout : 加强版的FrameLayout
-+ AppBarLayout : 垂直方向的LinearLayout， 子控件可以指定通过app:layout_scrollFlags 属性去影响它接受到的滚动事件
++ CoordinatorLayout : 加强版的FrameLayout, 可以监听其所有子控件的各种事件，然后自动帮助我们做出最为合理的响应。
++ AppBarLayout : 垂直方向的LinearLayout， 子控件可以指定通过app:layout_scrollFlags 属性去影响AppBarLayout接受到的滚动事件
 + RecyclerView : 列表
 + CardView : FrameLayout, 额外提供了圆角和阴影等效果, 看上去会有立体的感觉
 
@@ -590,17 +591,17 @@ CollapsingToolbarLayout是一个作用于Toolbar基础之上的布局,可以让T
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
         
-        <ImageView
-            android:id="@+id/fruit_image_view"android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            app:layout_collapseMode="parallax" />
-        
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_collapseMode="pin" />
+	        <ImageView
+	            android:id="@+id/fruit_image_view"android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:scaleType="centerCrop"
+	            app:layout_collapseMode="parallax" />
+	        
+	        <android.support.v7.widget.Toolbar
+	            android:id="@+id/toolbar"
+	            android:layout_width="match_parent"
+	            android:layout_height="?attr/actionBarSize"
+	            app:layout_collapseMode="pin" />
         
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -657,9 +658,10 @@ app:layout_anchor 属性指定了一个锚点,我们将锚点设置为AppBarLayo
 
 
 ### 充分利用系统状态栏空间
-背景图和状态栏融合到一起， 借助android:fitsSystemWindows=true。
-嵌套结构的布局中,所有父布局都设上这个属性才可以;
-程序的主题将状态栏颜色指定成透明色。android:statusBarColor 属性的值指定成@android:color/transparent;
-AndroidManifest.xml中使用修改后的主题
++ 背景图和状态栏融合到一起， 借助android:fitsSystemWindows=true。
++ 嵌套结构的布局中,所有父布局都设上这个属性才可以;
++ 程序的主题将状态栏颜色指定成透明色。android:statusBarColor 属性的值指定成@android:color/transparent;
++ AndroidManifest.xml中使用修改后的主题
 
 ![](/images/android_Ctb2.png)
+title: Android入门 图谱
