@@ -5,12 +5,10 @@ categories: Android
 ---
 
 ## 主要内容
-Android UI
-
 * Material Design
 
 *更新历史*
-2017-8-22 logcat
+
 
 <!-- more -->
 
@@ -95,22 +93,22 @@ app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 右击res目录→New→Directory,创建一个menu文件夹。然后右击menu文件→New→Menu resource file,创建一个toolbar.xml文件
 ```xml
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto">
-<item
-    android:id="@+id/backup"
-    android:icon="@drawable/ic_backup"
-    android:title="Backup"
-    app:showAsAction="always" />
-<item
-    android:id="@+id/delete"
-    android:icon="@drawable/ic_delete"
-    android:title="Delete"
-    app:showAsAction="ifRoom" />
-<item
-    android:id="@+id/settings"
-    android:icon="@drawable/ic_settings"
-    android:title="Settings"
-    app:showAsAction="never" />
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/backup"
+        android:icon="@drawable/ic_backup"
+        android:title="Backup"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete"
+        android:title="Delete"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings"
+        app:showAsAction="never" />
 </menu>
 ```
     修改activity
@@ -173,7 +171,9 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 android:id="@+id/drawer_layout"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
-<FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+<FrameLayout android:layout_width="match_parent" 
+    android:layout_height="match_parent">
+    
     <android.support.v7.widget.Toolbar 
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
@@ -406,7 +406,7 @@ Snackbar可能将我们的悬浮按钮给遮挡住, 可以使用CoordinatorLayou
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<android.support.design.widget.CoordinatorLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
