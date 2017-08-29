@@ -4,13 +4,18 @@ tags: [linux, server]
 categories: server
 ---
 
-主要内容
+## 主要内容
 * 环境准备
 * 用户管理
 * sshd管理
 * 防暴力破解
 
-主要以Centos为主。
+主要以 Centos 7 为主。
+
+
+*更新历史*
++ 2017-8-29 增加 SELinux 内容 
+
 
 ......<!-- more -->
 
@@ -92,6 +97,30 @@ plugins=(git git-flow git-flow-completion )
 
 ## firewall
 [firewall](http://giveme5.cc/2017/03/28/linux/Firewalld-md/)
+
+
+## SELinux
+### 查看状态
+```
+/usr/sbin/sestatus -v 
+SELinux status:                 enabled ##如果SELinux status参数为enabled即为开启状态
+  
+##或者
+getenforce
+```
+
+### 关闭 SELinux
+#### 临时关闭
+`setenforce 0`
+
+#### 临时开启
+`setenforce 1`
+
+#### 永久关闭
+修改 `/etc/selinux/config`
+将 `SELINUX=enforcing` 改为 `SELINUX=disabled`
+重启机器
+
 
 
 ## 防暴力破解
