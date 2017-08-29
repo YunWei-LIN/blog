@@ -14,10 +14,10 @@ categories: linux
 ## 公钥登录
 
 ### 客户端生成公钥密钥对
-`ssh-keygen -t rsa -C "your_email@your_email.com"`
+`ssh-keygen -t rsa -C "your_email@your_email.com" -b 4096`
 
 ```
-[root@server ~]# ssh-keygen -b 1024 -t rsa
+[root@server ~]# ssh-keygen -t rsa -C "your_email@your_email.com" -b 4096
 Generating public/private rsa key pair.     #提示正在生成rsa密钥对
 Enter file in which to save the key (~/.ssh/id_dsa):     #询问公钥和私钥存放的位置，回车用默认位置即可
 Enter passphrase (empty for no passphrase):     #询问输入私钥密语，输入密语
