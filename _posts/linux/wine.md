@@ -1,11 +1,15 @@
 ---
 title: linux wine 32 & 64
-date: 2016-10-29 13:00:10
+date: 2017-09-26 13:00:10
 tags: [linux, wine]
 categories: linux
 ---
+## 主要内容
   wine在linux中很常用，目前是32位和64位的软件都有；在此讨论在64位centos 7中安装32位和64位的wine。
 还有wine的中文环境下一些乱码问题。
+
+*更新历史*
+2017-09-26 增加 同时 wine 32和64 的应用
 
 <!-- more -->
 
@@ -61,5 +65,26 @@ categories: linux
     fc-list |grep SimSun
 ## 中文乱码
 [参考](www.oschina.net/question/12_2853)
+
+
+## wine 32和64 的应用
+[WINEPREFIX 和 WINEARCH ](https://wiki.archlinux.org/index.php/Wine_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#WINEPREFIX)
+
+### WINEPREFIX
+通过设置WINEPREFIX环境变量，可以更改Wine系统目录的位置。如果希望让不同的Windows程序使用不同的系统环境或配置，这一变量会非常有用。
+比如同时需要wine 32位和64位的程序， 就需要设置32位和64位的Wine系统目录。
+
+```sh
+env WINEPREFIX=~/.win-32  wine32  32A程序.exe
+env WINEPREFIX=~/.win-64  wine64  64B程序.exe
+```
+
+### WINEARCH
+对于64位用户，如果使用[multilib]仓库里的Wine，默认创建的系统目录是64位环境的。若想使用纯32位环境，修改WINEARCH 变量win32为即可
+```sh
+WINEARCH=win32 WINEPREFIX=~/win32 winecfg 
+WINEPREFIX=~/win64 winecfg
+```
+
  
 
