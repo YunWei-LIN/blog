@@ -40,14 +40,14 @@ Java 8 Streams 在集合和其他数据集上运行函数式操作。
 
 |操作|内容|
 | ------ | ------------------------ |
-|filter(Predicate<T>)|与预期匹配的流的元素|
-|map(Function<T, U>)|将提供的函数应用于流的元素的结果|
-|flatMap(Function<T, Stream<U>>|将提供的流处理函数应用于流元素后获得的流元素|
+|filter(Predicate<T>)|接受一个断言（谓词，返回boolean的函数）作为参数，并返回一个包括所有符合断言的元素的流|
+|map(Function<T, U>)|映射， 将提供的函数应用于流的元素，并将其映射成一个新的元素|
+|flatMap(Function<T, Stream<U>>|映射，扁平， 将提供的函数应用于流元素后获得的流元素， 即将一个流中的每个值都换成另一个流，然后把所有的流连接成为一个流|
 |distinct()|已删除了重复的流元素|
 |sorted()|按自然顺序排序的流元素|
 |Sorted(Comparator<T>)|按提供的比较符排序的流元素|
 |limit(long)|截断至所提供长度的流元素|
-|skip(long)|丢弃了前 N 个元素的流元素|
+|skip(long)|丢弃了前 N 个元素的流元素， 与 `limit` 互补|
 |takeWhile(Predicate<T>)|（仅限 Java 9）在第一个提供的预期不是 true 的元素处阶段的流元素|
 |dropWhile(Predicate<T>)|（仅限 Java 9）丢弃了所提供的预期为 true 的初始元素分段的流元素|
 
