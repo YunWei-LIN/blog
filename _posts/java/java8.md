@@ -66,6 +66,7 @@ Stream API（java.util.stream）将函数式编程引入了Java库中。
 这是目前为止最大的一次对Java库的完善！！！！
 极大得简化了集合操作
 
+[简要API](/2017/10/12/java/Streams/)
 [java.util.stream](http://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html#StreamOps)
 [使用Stream API处理集合](https://wizardforcel.gitbooks.io/java8-tutorials/content/Java%208%20%E6%96%B0%E7%89%B9%E6%80%A7%E4%B9%8B%E6%97%85%20%E4%BD%BF%E7%94%A8%20Stream%20API%20%E5%A4%84%E7%90%86%E9%9B%86%E5%90%88.html)
 
