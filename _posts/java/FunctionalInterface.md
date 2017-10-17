@@ -1,4 +1,19 @@
-内置函数式接口
+title: Java 8 内置函数式接口
+date: 2017-10-17 19:44:58
+tags: [java 8, jdk8, FunctionalInterface, 内置函数式接口]
+categories: java
+---
+
+## 主要内容
+函数式接口
+
+
+*更新历史*
+无
+
+<!-- more -->
+
+---
 
 ## 函数式接口
 函数式接口就是只有一个方法的接口，如Runnable、Callable、Comparable都称作函数式接口。
