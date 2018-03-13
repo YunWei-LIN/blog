@@ -5,12 +5,14 @@ date: 2018-02-27 10:48:42
 tags: [nginx, keepalived, 高性能,负载均衡]
 categories: server
 ---
-主要内容
+## 主要内容
 
 keepalived + nginx 爽活热备负载均衡
 
+*更新历史*
+无
 
-
+<!-- more -->
 
 ## 系统安装
 CentOS 7.3

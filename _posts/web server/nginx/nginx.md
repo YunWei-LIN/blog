@@ -74,7 +74,11 @@ worker_rlimit_nofile 4096; # set open fd limit, 根据服务器具体情况
 
 
 http {
- server_tokens  off; #隐藏nginx版本号
+    server_tokens  off; #隐藏nginx版本号
+ 
+    types_hash_max_size 2048;
+
+    client_max_body_size 8m; # 413 Request Entity Too Large
 
 }
 ```
