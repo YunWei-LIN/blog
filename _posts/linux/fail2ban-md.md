@@ -1,7 +1,7 @@
 ---
 title: fail2ban防御暴力破解攻击
 date: 2017-03-28 17:30:41
-tags: [linux, fail2ban]
+tags: [linux, fail2ban, 安全]
 categories: linux
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: CentOS 7 Firewalld
 date: 2017-03-28 19:11:43
-tags: [linux, fail2ban]
+tags: [linux, firewalld, 防火墙, 安全]
 categories: linux
 ---
 
@@ -81,11 +81,21 @@ Firewall 能将不同的网络连接归类到不同的信任级别，Zone 提供
 
 ## 基础命令
 
-```
+```sh
 systemctl start firewalld         # 启动
 systemctl enable firewalld        # 开机启动
 systemctl stop firewalld          # 关闭
 systemctl disable firewalld       # 取消开机启动
+```
+
+具体的规则管理，可以使用 firewall-cmd，具体的使用方法可以
+
+```sh
+firewall-cmd --help
+
+--zone=NAME                         # 指定 zone
+--permanent                         # 永久修改，--reload 后生效
+--timeout=seconds                   # 持续效果，到期后自动移除，用于调试，不能与 --permanent 同时使用
 ```
 
 ## 具体规则/例子
