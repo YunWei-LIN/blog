@@ -1,6 +1,6 @@
 title: 对象的引用 reference
 date: 2015-10-15 15:22:03
-tags: reference
+tags: [java, reference]
 categories: 杂谈
 ---
   很多现代语言都有 `GC` ，与 `GC` 紧密相关的是对象的引用。

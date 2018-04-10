@@ -1,6 +1,6 @@
 title: spring CORS
 date: 2015-08-19 16:51:45
-tags: Spring CORS
+tags: [spring,  CORS]
 categories: spring
 ---
 

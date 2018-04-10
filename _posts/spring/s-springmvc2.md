@@ -1,6 +1,6 @@
 title: Spring MVC（二） 配置
 date: 2015-08-07 13:17:37
-tags: Spring MVC
+tags: [spring, mvc]
 categories: spring
 ---
 

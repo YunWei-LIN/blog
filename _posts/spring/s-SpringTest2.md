@@ -1,6 +1,6 @@
 title: SpringTesting （二） Spring TestContext Framework
 date: 2015-08-12 19:56:15
-tags: Spring Testing
+tags: [spring, test, junit]
 categories: spring
 ---
 [Spring TestContext Framework](http://docs.spring.io/spring/docs/4.2.1.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#testcontext-framework)

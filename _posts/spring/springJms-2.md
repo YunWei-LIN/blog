@@ -1,6 +1,6 @@
 title: Spring JMS （二）
 date: 2015-09-6 18:53:49
-tags: Spring JMS
+tags: [spring,  JMS]
 categories: spring
 ---
 ## 发送 JMS 消息

@@ -1,6 +1,6 @@
 title: Java 8 Streams
 date: 2017-10-12 19:44:58
-tags: [java 8, jdk8, Streams]
+tags: [java, java 8, jdk8, Streams]
 categories: java
 ---
 

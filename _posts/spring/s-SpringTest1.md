@@ -1,6 +1,6 @@
 title: SpringTesting （一） Annotations
 date: 2015-08-11 15:56:15
-tags: Spring Testing
+tags: [spring, junit, test]
 categories: spring
 ---
 [Annotations](http://docs.spring.io/spring/docs/4.2.1.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#integration-testing-annotations)

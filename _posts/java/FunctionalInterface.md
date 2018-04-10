@@ -1,6 +1,6 @@
 title: Java 8 内置函数式接口
 date: 2017-10-17 19:44:58
-tags: [java 8, jdk8, FunctionalInterface, 内置函数式接口]
+tags: [java, java 8, jdk8, FunctionalInterface, 内置函数式接口]
 categories: java
 ---
 

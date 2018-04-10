@@ -1,6 +1,6 @@
 title: SpringTesting （三） Spring MVC Test Framework
 date: 2015-08-13 19:56:15
-tags: Spring Testing
+tags: [spring, test, junit]
 categories: spring
 ---
 [Spring MVC Test Framework](http://docs.spring.io/spring/docs/4.2.1.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#spring-mvc-test-framework)建立在Servlet API mock objects基础上，他不需要一个运行的Servlet容器， 

@@ -1,7 +1,7 @@
 ---
 title: Java 8 新特性 概要
 date: 2017-06-30 22:18:03
-tags: [java 8, jdk8]
+tags: [java, java 8, jdk8]
 categories: java
 ---
 

@@ -1,6 +1,6 @@
 title: Spring MVC（一） 常用点
 date: 2015-08-06 17:37:37
-tags: Spring MVC
+tags: [spring, mvc]
 categories: spring
 ---
 springmvc一

@@ -1,6 +1,6 @@
 title: Spring JMS (一)
 date: 2015-08-26 19:53:49
-tags: Spring JMS
+tags: [spring,  JMS]
 categories: spring
 ---
 ## JMS

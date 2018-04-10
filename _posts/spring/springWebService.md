@@ -1,6 +1,6 @@
 title: spring WebService JAX-WS
 date: 2015-08-25 19:51:43
-tags: Spring WebService JAX-WS
+tags: [spring,  WebService, JAX-WS]
 categories: spring
 ---
 

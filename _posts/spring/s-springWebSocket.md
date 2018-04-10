@@ -1,6 +1,6 @@
 title: Spring Web Socket
 date: 2015-08-18 19:37:37
-tags: Spring WebSocket
+tags: [spring,  WebSocket]
 categories: spring
 ---
 ## 使用情景

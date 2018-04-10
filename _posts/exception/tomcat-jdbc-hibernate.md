@@ -1,6 +1,6 @@
 title: tomcat-jdbc hibernate 版本冲突
 date: 2015-10-29 16:10:08
-tags: [hibernate, tomcat-jdbc]  
+tags: [hibernate, tomcat-jdbc, tomcat]  
 categories: exception
 ---
 搭建了一套 Spring 核心的 web 服务基础框架。

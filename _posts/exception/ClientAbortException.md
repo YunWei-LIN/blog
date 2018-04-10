@@ -1,6 +1,6 @@
 title: ClientAbortException
 date: 2016-2-15 16:10:08
-tags: [tomcat,Spring MVC]  
+tags: [tomcat, spring, mvc]
 categories: exception
 ---
 Spring MVC 4.2.1.RELEASE ， 容器 tomcat 8.21， nginx ： 客户端在服务端响应前就关闭（socket），比如下载文件一半关闭浏览器，
