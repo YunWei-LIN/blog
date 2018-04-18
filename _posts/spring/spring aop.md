@@ -39,31 +39,33 @@ spring aop 面向切面编程; 主要探索Spring框架对面向切面编程的�
 + AOP代理(AOP Proxy)
 + 织入(Weaving)
 + 通知(Advice)
-    通知类型：
-    + 前置通知(Before advice)：在某连接点之前执行的通知
-    + 后置通知(After returning advice)：在某连接点正常完成后执行的通知
-    + 异常通知(After throwing advice)：在方法抛出异常退出时执行的通知
-    + 最终通知(After (finally) advice)当某连接点退出的时候执行的通知(不论是正常返回还是异常退出)
-    + 环绕通知(Around Advice)：包围一个连接点的通知，如方法调用。这是最强大的一种通知类型。环绕通知可以在方法调用前后完成自定义的行为。它也会选择是否继续执行连接点或直接返回它自己的返回值或抛出异常来结束执行。
+
 
 ### 切面(Aspect)
-一个关注点的模块化，这个关注点可能会横切多个对象。通常由 通知(advice)、切点(pointcuts)和织入点(join points)组成；
+一个关注点的模块化，这个关注点可能会横切多个对象。通常由 通知(advice)、切点(pointcuts)和连接点(join points)组成；
 事务管理是J2EE应用中一个关于横切关注点的很好的例子。在Spring AOP中，切面可以使用基于模式)或者基于@Aspect注解的方式来实现。
 ![](/images/aop2.png)
->>切面的功能(advice)通过一个或者多个织入点织入到应用的执行流程
+>>切面的功能(advice)通过一个或者多个连接点织入到应用的执行流程
 
 ### 连接点(Joinpoint)
 在程序执行过程中某个特定的点，可能是正在调用的方法、正在抛出的异常或者是正在被修改的属性, 比如某方法调用的时候或者处理异常的时候。
 在Spring AOP中，一个连接点总是表示一个方法的执行。
-通常是业务代码中的概念， 不在切面(Aspect)代码中体现。
+通常是业务代码中的概念， 不在切面(Aspect)代码中体现。理论上可以做为切入点的集合。
 
 ### 切入点(Pointcut)
 匹配连接点的断言， 逻辑上是连接点的子集，就是当前切面(Aspect)所关心/处理的连接点。
 在切面(Aspect)代码中通过 `@Pointcut` 定义。
 
 ### 通知(Advice)
-在切面的某个特定的切入点上执行的动作， 就是切面的真正目的——它真正要做的工作。其中包括了“around”、“before”和“after”等不同类型的通知(通知的类型将在后面部分进行讨论)。许多AOP框架(包括Spring)都是以拦截器做通知模型，并维护一个以连接点为中心的拦截器链。
-通知和一个切入点表达式关联，并在满足这个切入点的连接点上运行(例如，当执行某个特定名称的方法时)。切入点表达式如何和连接点匹配是AOP的核心：Spring缺省使用AspectJ切入点语法。
+在切面的某个特定的切入点上执行的动作， 就是切面的真正目的——它真正要做的工作。
+    
+通知类型：
++ 前置通知(Before advice)：在某连接点之前执行的通知
++ 后置通知(After returning advice)：在某连接点正常完成后执行的通知
++ 异常通知(After throwing advice)：在方法抛出异常退出时执行的通知
++ 最终通知(After (finally) advice)当某连接点退出的时候执行的通知(不论是正常返回还是异常退出)
++ 环绕通知(Around Advice)：包围一个连接点的通知，如方法调用。这是最强大的一种通知类型。环绕通知可以在方法调用前后完成自定义的行为。它也会选择是否继续执行连接点或直接返回它自己的返回值或抛出异常来结束执行。
+
 
 ### 引入(Introduction)
 用来给一个类型声明额外的方法或属性(也被称为连接类型声明(inter-type declaration))。Spring允许引入新的接口(以及一个对应的实现)到任何被代理的对象。例如，你可以使用引入来使一个bean实现IsModified接口，以便简化缓存机制。
@@ -98,7 +100,7 @@ xml config： `<aop:aspectj-autoproxy />`
 一个 完整(经典)切面 通常 由 切面， 切入点， 通知 3部分组成。
 
 
-#### 声明一个切面 `@Aspect`
+#### 切面 `@Aspect`
 ```java
 @Aspect
 public class Aspect {
@@ -106,89 +108,57 @@ public class Aspect {
 }
 ```
 
-#### 声明一个切入点(pointcut) `@Pointcut`
+#### 切入点(pointcut) `@Pointcut`
 ```java
-@Pointcut("execution(* transfer(..))")// the pointcut expression
-private void anyOldTransfer() {}// the pointcut signature
+@Pointcut(value="execution(* transfer(..)) && args(param)", argNames = "param")// the pointcut expression
+private void pointcutName() {}// the pointcut signature
 ```
+
++ `value` : 指定切入点表达式, 如execution、args等
++ `argNames` : 指定该切入点方法参数列表,多个用,分隔,这些参数将传递给通知方法同名的参数;
++ `pointcutName` : 切入点名字，可以用该名字引用该切入点表达式
 
 切入点指示符(PCD)
-
-|切入点指示符|说明|
-|---| :------------------------------------------ |
-|execution|匹配方法执行的连接点，这是你将会用到的Spring的最主要的切入点指示符。|
-|within|限定匹配特定类型的连接点(在使用Spring AOP的时候，在匹配的类型中定义的方法的执行)。|
-|this|限定匹配特定的连接点(使用Spring AOP的时候方法的执行)，其中bean reference(Spring AOP 代理)是指定类型的实例。|
-|target|限定匹配特定的连接点(使用Spring AOP的时候方法的执行)，其中目标对象(被代理的应用对象)是指定类型的实例。|
-|args|限定匹配特定的连接点(使用Spring AOP的时候方法的执行)，其中参数是指定类型的实例。|
-|@target|限定匹配特定的连接点(使用Spring AOP的时候方法的执行)，其中正执行对象的类持有指定类型的注解。|
-|@args|限定匹配特定的连接点(使用Spring AOP的时候方法的执行)，其中实际传入参数的运行时类型持有指定类型的注解。|
-|@within|限定匹配特定的连接点，其中连接点所在类型已指定注解(在使用Spring AOP的时候，所执行的方法所在类型已指定注解)。|
-|@annotation|限定匹配特定的连接点(使用Spring AOP的时候方法的执行)，其中连接点的主题持有指定的注解。|
-
-更多内容参考附录
-
-常用的切入点(pointcut)例子 
-```java
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-
-@Aspect
-public class SystemArchitecture {
-
-  /**
-   * A join point is in the web layer if the method is defined
-   * in a type in the com.xyz.someapp.web package or any sub-package
-   * under that.
-   */
-  @Pointcut("within(com.xyz.someapp.web..*)")
-  public void inWebLayer() {}
-
-  /**
-   * A join point is in the service layer if the method is defined
-   * in a type in the com.xyz.someapp.service package or any sub-package
-   * under that.
-   */
-  @Pointcut("within(com.xyz.someapp.service..*)")
-  public void inServiceLayer() {}
-
-  /**
-   * A join point is in the data access layer if the method is defined
-   * in a type in the com.xyz.someapp.dao package or any sub-package
-   * under that.
-   */
-  @Pointcut("within(com.xyz.someapp.dao..*)")
-  public void inDataAccessLayer() {}
-
-  /**
-   * A business service is the execution of any method defined on a service
-   * interface. This definition assumes that interfaces are placed in the
-   * "service" package, and that implementation types are in sub-packages.
-   * 
-   * If you group service interfaces by functional area (for example, 
-   * in packages com.xyz.someapp.abc.service and com.xyz.def.service) then
-   * the pointcut expression "execution(* com.xyz.someapp..service.*.*(..))"
-   * could be used instead.
-   *
-   * Alternatively, you can write the expression using the 'bean'
-   * PCD, like so "bean(*Service)". (This assumes that you have
-   * named your Spring service beans in a consistent fashion.)
-   */
-  @Pointcut("execution(* com.xyz.someapp.service.*.*(..))")
-  public void businessService() {}
-  
-  /**
-   * A data access operation is the execution of any method defined on a 
-   * dao interface. This definition assumes that interfaces are placed in the
-   * "dao" package, and that implementation types are in sub-packages.
-   */
-  @Pointcut("execution(* com.xyz.someapp.dao.*.*(..))")
-  public void dataAccessOperation() {}
-
+<style>
+table th:first-of-type {
+    width: 20%;
 }
-```
+</style>
+
+|切入点指示符|说明                                                                     |
+| :-------: | :------------------------------------------ |
+| execution | 匹配方法，这是你将会用到的Spring的最主要的切入点指示符。|
+| within | 匹配特定类型之内的全部方法|
+| target | 用于匹配当前目标对象类型的连接点,不包括接口。|
+| args | 用于匹配当前执行的方法传入的参数为指定类型的连接点|
+| this | 用于匹配当前AOP代理对象类型的连接点,包括接口|
+| @annotation | 匹配持有指定注解的方法(注解在方法上)。|
+| @within | 匹配持有指定注解的类型里面的所有方法(注解在类上)|
+| @target | 用于匹配当前目标对象类型的连接点，其中目标对象持有指定的注解|
+| @args | 匹配当前执行的方法传入的参数持有指定的注解|
+
+
+
 
 #### 声明通知
+
+```java
+@Before(value = "切入点表达式或命名切入点", argNames = "参数列表参数名")
+@After(value  = "切入点表达式或命名切入点", argNames = "参数列表参数名")
+@Around(value = "切入点表达式或命名切入点", argNames = "参数列表参数名")
+@AfterReturning(
+value = "切入点表达式或命名切入点",
+pointcut = "切入点表达式或命名切入点", // 如果指定了将覆盖value属性指定的，pointcut具有高优先级
+argNames = "参数列表参数名",
+returning = "返回值对应参数名")
+@AfterThrowing(
+value = "切入点表达式或命名切入点",
+pointcut = "切入点表达式或命名切入点",
+argNames = "参数列表参数名",
+throwing = "异常对应参数名")
+```
+如果在同一个连接点上执行多个通知,可以使用`@Order`注解决定其执行顺序
+
 + 前置通知 `@Before` 
 声明前置通知
 
@@ -261,48 +231,10 @@ public class AroundExample {
 #### 通知参数(Advice parameters)
 可以在通知签名中声明所需的参数.
 
-##### 传递参数给通知
-定义一个切入点,然后直接从通知中访问那个命名切入点。
-如下的参数 `account`
-
-```java
-@Pointcut("com.xyz.myapp.SystemArchitecture.dataAccessOperation() &&" + 
-          "args(account,..)")
-private void accountDataAccessOperation(Account account) {}
-
-@Before("accountDataAccessOperation(account)")
-public void validateAccount(Account account) {
-  // ...
-}
-```
-
-##### 确定参数名
-如果第一个参数是JoinPoint， ProceedingJoinPoint， 或者JoinPoint.StaticPart类型， 你可以在“argNames”属性的值中省去参数的名字。
+如果第一个参数是JoinPoint， ProceedingJoinPoint， 或者JoinPoint.StaticPart类型， 你可以在“argNames”属性的值中省去参数的名字,Spring会自动传入。
 其他使用 额外的"argNames"属性指定的参数名。
-如下 参数 `bean`, `jp` 都可以使用。
+如下 参数 `trackNumber`, `jp` 都可以使用。
 
-```java
-@Before(
-   value="com.xyz.lib.Pointcuts.anyPublicMethod() && target(bean) && @annotation(auditable)",
-   argNames="bean,auditable")
-public void audit(JoinPoint jp, Object bean, Auditable auditable) {
-  AuditCode code = auditable.value();
-  // ... use code, bean, and jp
-}
-```
-
-##### 处理参数
-带参数的的proceed()调用
-
-```java
-@Around("execution(List<Account> find*(..)) &&" +
-        "args(accountHolderNamePattern)")		
-public Object preProcessQueryPattern(ProceedingJoinPoint pjp, String accountHolderNamePattern)
-throws Throwable {
-  String newPattern = preProcess(accountHolderNamePattern);
-  return pjp.proceed(new Object[] {newPattern});
-}
-```
 
 #### 完整切面例子
 上面章节分别说明了切面，切入点，通知， 下面结合整体例子说明， 注意 1,2,3 点。
@@ -323,7 +255,7 @@ public class TrackCounter {
     public void trackPlayed(int trackNumber) {} //2.1 注意参数声明和上面切入点签名一致
 
     @Before("trackPlayed(trackNumber)")  //3. 通知
-    public void countTrack(int trackNumber) {  //3.1 注意参数声明和上面通知签名一致
+    public void countTrack(JoinPoint jp, int trackNumber) {  //3.1 注意参数声明和上面通知签名一致
         int currentCount = getPlayCount(trackNumber);
         trackCounts.put(trackNumber, currentCount + 1);
     }
@@ -403,7 +335,22 @@ public class EncodeIntroducerTest {
 
 ```
 
-## 附录 切入点表达式的例子
+## 附录 切入点表达式
+
+### 类型匹配语句
+类型匹配语句格式像下面这样(带?的属于可选,可以不写):
+
+对类的匹配: 注解`?` 类的全限定名字
+对方法的匹配: 注解`?` 修饰符`?` 返回值类型 类型声明`?` 方法名(参数列表) 异常列表`？`
+
+### 类型匹配的通配符
+
+`*` : 匹配任何数量字符；
+`..` :(两个点)匹配任何数量字符的重复;如在类型模式中匹配任何数量子包,而在方法参数模式中匹配任何数量参数
+`+` : 匹配指定类型的子类型,仅能作为后缀放在类型模式后边
+
+### 切入点表达式 例
+AspectJ使用 与(&&)、或(||)、非(!)来组合切入点表达式, 在xml文件中可使用and、or、not
 
 + 任意公共方法的执行：
 `execution(public * *(..))`
