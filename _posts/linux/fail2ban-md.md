@@ -217,4 +217,12 @@ Status for the jail: sshd
 fail2ban-client set sshd unbanip 192.168.1.8
 ```
 
+* 查看防火墙
+```sh
+firewall-cmd --direct --get-all-rules
+  
+ipset list
+```
+
+
 
