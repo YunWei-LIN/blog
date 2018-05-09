@@ -11,7 +11,7 @@ categories: linux
 * 配置
 * 使用
 
-使用 fail2ban 防御服务器的暴力破解攻击， ssh 服务为例。
+使用 fail2ban 防御服务器的暴力破解攻击， ssh，nginx 服务为例。
 
 <!-- more -->
 
@@ -122,6 +122,59 @@ journalmatch = _SYSTEMD_UNIT=sshd.service + _COMM=sshd
 #   matched away first.
 #
 # Author: Cyril Jaquier, Yaroslav Halchenko, Petr Voralek, Daniel Black
+```
+
+## 自定义服务
+以下检查 nginx 服务 400,404,500 错误状态为例
+### jail
+路径 `/etc/fail2ban/jail.d` , 新建 `jail_nginx-err.local`
+内容如下 
+```sh
+[nginx-err]
+enabled = true
+port = http,https
+filter = nginx-err
+logpath = /var/log/nginx/access.log
+findtime = 600
+maxretry = 20
+bantime = 7200
+```
+
+大致意义如下：
+
++ [nginx-err]：定义jail名称
++ enabled：是否启用该jail，默认的所有规则都没有该项，需要手动添加
++ port：指定封禁的端口，默认为0:65535，也就是所有端口，但可以在jail中设定
++ filter：指定过滤器名称
++ logpath：日志路径
++ action：达到阈值后的动作， 默认
++ maxretry：阈值
++ findtime：时间间隔 单位秒
++ bantime：封禁时长
++ ignoreip：忽略的IP
+
+在这里有几点要注意的：
+
++ logpath与action可以有多行，如action中的设定：
+++ 调用iptables-multiport封禁目标IP访问的多个端口
+++ 调用sendmail发送告警邮件
++ findtime不是检查日志的时间间隔，日志的检查是实时的。因为fail2ban自带数据库，所以可以在设定的时间内统计匹配次数
++ ignoreip添加后端服务器的IP或CDN的IP
+
+
+### action
+默认
+
+### filter
+路径 `/etc/fail2ban/filter.d` 新建 `nginx-err.conf`
+
+```sh
+[Definition]
+
+failregex = ^<HOST> -.*- .*HTTP/1.* (404|400|500) .*$
+
+ignoreregex =
+
 ```
 
 ## 使用
