@@ -134,6 +134,7 @@ journalmatch = _SYSTEMD_UNIT=sshd.service + _COMM=sshd
 enabled = true
 port = http,https
 filter = nginx-err
+banaction = firewallcmd-ipset
 logpath = /var/log/nginx/access.log
 findtime = 600
 maxretry = 20
@@ -147,7 +148,7 @@ bantime = 7200
 + port：指定封禁的端口，默认为0:65535，也就是所有端口，但可以在jail中设定
 + filter：指定过滤器名称
 + logpath：日志路径
-+ action：达到阈值后的动作， 默认
++ banaction：达到阈值后的动作， 默认
 + maxretry：阈值
 + findtime：时间间隔 单位秒
 + bantime：封禁时长
@@ -155,15 +156,15 @@ bantime = 7200
 
 在这里有几点要注意的：
 
-+ logpath与action可以有多行，如action中的设定：
-++ 调用iptables-multiport封禁目标IP访问的多个端口
++ logpath与banaction可以有多行，如action中的设定：
+++ 调用firewallcmd-ipset封禁目标IP访问的多个端口
 ++ 调用sendmail发送告警邮件
 + findtime不是检查日志的时间间隔，日志的检查是实时的。因为fail2ban自带数据库，所以可以在设定的时间内统计匹配次数
 + ignoreip添加后端服务器的IP或CDN的IP
 
 
 ### action
-默认
+使用现有的 `firewallcmd-ipset`
 
 ### filter
 路径 `/etc/fail2ban/filter.d` 新建 `nginx-err.conf`
