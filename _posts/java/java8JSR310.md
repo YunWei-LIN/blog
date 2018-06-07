@@ -66,6 +66,12 @@ public class TimeIntroduction {
         Clock clock2 = Clock.fixed(instant1, ZoneId.systemDefault()); //固定瞬时时间时钟  
         Instant instant3 = Instant.now(clock2);//得到时钟的瞬时时间  
         System.out.println(instant3.toEpochMilli());//equals instant1  
+        
+        //字符串时间戳 生成 Instant
+        //不能直接转，DateTimeFormatter必须加上timezone 再转，add the default timezone to the formatter  
+        String dateTime = "2018-06-07 10:19:00";
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
+        Instant.from(format.parse(dateTime)).getEpochSecond()
     }
     public static void testLocalDateTime() {
         //使用默认时区时钟瞬时时间创建 Clock.systemDefaultZone() -->即相对于 ZoneId.systemDefault()默认时区  
