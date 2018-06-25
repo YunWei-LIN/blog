@@ -1,13 +1,13 @@
 
 
-title: keepalived + nginx 爽活热备负载均衡
+title: keepalived + nginx 双活热备负载均衡
 date: 2018-02-27 10:48:42
 tags: [nginx, keepalived, 高性能,负载均衡, server]
 categories: server
 ---
 ## 主要内容
 
-keepalived + nginx 爽活热备负载均衡
+keepalived + nginx 双活热备负载均衡
 
 *更新历史*
 无
