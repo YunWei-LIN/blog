@@ -126,6 +126,9 @@ journalmatch = _SYSTEMD_UNIT=sshd.service + _COMM=sshd
 
 ## 自定义服务
 以下检查 nginx 服务 400,404,500 错误状态为例
+
+
+
 ### jail
 路径 `/etc/fail2ban/jail.d` , 新建 `jail_nginx-err.local`
 内容如下 
@@ -169,13 +172,23 @@ bantime = 7200
 ### filter
 路径 `/etc/fail2ban/filter.d` 新建 `nginx-err.conf`
 
+
 ```sh
 [Definition]
 
-failregex = ^<HOST> -.*- .*HTTP/1.* (404|400|500) .*$
+failregex = ^<HOST> -.*- .*HTTP/1.* (404|400|500) \d+ .*$
 
 ignoreregex =
 
+```
+
+
+注意：
+nginx log 格式
+```
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
 ```
 
 ## 使用

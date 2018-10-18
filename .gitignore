@@ -7,5 +7,5 @@ public/
 .deploy*/
 scaffolds
 package.json
-
+.directory
 
