@@ -13,6 +13,10 @@ categories: linux
 
 使用 fail2ban 防御服务器的暴力破解攻击， ssh，nginx 服务为例。
 
+变更历史
+* Fail2Ban v0.9.7 ssh filter
+
+
 <!-- more -->
 
 实验环境 
@@ -65,6 +69,10 @@ bantime = 7200 # 禁止访问时间（秒）
 
 如果你使用公钥登录， 在修改下 ssh 的拦截条件, 增加 `^%(__prefix_line)sConnection closed by <HOST> \[preauth\]$`
 
+Fail2Ban v0.9.7 时 `^%(__prefix_line_sl)sConnection closed by <HOST>.*%(__suff)s$`
+
+
+
 ```sh
 ╰─# vim filter.d/sshd.conf 
 ```
@@ -103,7 +111,7 @@ failregex = ^%(__prefix_line)s(?:error: PAM: )?[aA]uthentication (?:failure|erro
             ^(?P<__prefix>%(__prefix_line)s)Connection from <HOST> port \d+(?: on \S+ port \d+)?<SKIPLINES>(?P=__prefix)Disconnecting: Too many authentication failures for .+? \[preauth\]$
             ^%(__prefix_line)s(error: )?maximum authentication attempts exceeded for .* from <HOST>(?: port \d*)?(?: ssh\d*)? \[preauth\]$
             ^%(__prefix_line)spam_unix\(sshd:auth\):\s+authentication failure;\s*logname=\S*\s*uid=\d*\s*euid=\d*\s*tty=\S*\s*ruser=\S*\s*rhost=<HOST>\s.*$
-            ^%(__prefix_line)sConnection closed by <HOST> \[preauth\]$  ##增加在这里
+            ^%(__prefix_line_sl)sConnection closed by <HOST>.*%(__suff)s$  ##增加在这里
 
 ignoreregex =
 
