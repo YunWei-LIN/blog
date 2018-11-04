@@ -1,17 +1,27 @@
 ---
-title: springfox 整合springmvc 生成rest接口文档
-date: 2017-03-14 18:31:21
-tags: [spring, springfox]
+title: swagger springfox rest接口文档
+date: 2018-11-04 18:31:21
+tags: [spring, springfox, swagger]
 categories: spring
 ---
 
 主要内容
 
 
-`springfox` 可以用来快速生成RESTful API文档,使后台开发人员与移动端开发人员更好的对接.
-前身是 `swagger-springmvc` , 根基都是 `swagger`
+`swagger`(`springfox`) 可帮助开发人员设计，构建，记录和使用RESTful Web服务, 使后台开发人员与移动端开发人员更好的对接.
+大多数用户通过Swagger UI工具可很简单识别和使用Swagger。
 
-本文以 `springfox-swagger2` 版本为例说明。
+最大优点： 接口开发人员不用另外写接口文档，代码注释中写上swagger相关的注释就可以自动生成接口文档；
+最大缺点： 对源代码侵入比较严重。
+
+
+
+本文以 `springfox-swagger2` V2.9.2 版本为例说明。
+
+末了，还有个稍重量级竞品 [RAP(阿里妈妈出品) ](https://github.com/thx/rap2-delos) ， 感兴趣的可以去玩玩。
+
+*更新历史*
++2018-11-04: 
 
 <!-- more -->
 
@@ -20,12 +30,12 @@ categories: spring
 <dependency>
     <groupId>io.springfox</groupId>
     <artifactId>springfox-swagger2</artifactId>
-    <version>2.6.1</version>
+    <version>2.9.2</version>
 </dependency>
 <dependency>
     <groupId>io.springfox</groupId>
     <artifactId>springfox-swagger-ui</artifactId>
-    <version>2.6.1</version>
+    <version>2.9.2</version>
 </dependency>
 ```
 
@@ -33,20 +43,34 @@ categories: spring
 ```java
 @Configuration
 @EnableSwagger2
+@ConditionalOnExpression("${giveme5.swagger.enable:true}") //是否启用Swagger的判断
 public class SwaggerConfig {
 
-    @Bean
-    public Docket buildDocket(){
-        return new Docket(DocumentationType.SWAGGER_2)
-                .host("localhost:8080") //服务地址和端口
-                .apiInfo(buildApiInf())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.springfox.controller"))//controller路径
-                .paths(PathSelectors.any())
-                .build();
+    /**
+     * 模拟接口的认证授权
+     * 配合 @ApiOperation(authorizations = { @Authorization(value="apiKey") })
+     * @return
+     */
+    private ApiKey apiKey() {
+        return new ApiKey("apiKey", "Authorization", "header");
     }
 
-    private ApiInfo buildApiInf(){
+
+    @Bean
+    public Docket createRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .securitySchemes(Arrays.asList(apiKey()))
+                .select()
+                    .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                    .paths(PathSelectors.ant("/app/**")) // 只对 url 匹配 /app/** 的生效
+                    .build()
+
+
+                ;
+    }
+
+    private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
                 .title("springfox 大标题")
                 .termsOfServiceUrl("http://giveme5.cc/")
@@ -58,7 +82,12 @@ public class SwaggerConfig {
 }
 ```
 
-## SpringMvc 配置
+## Spring 配置
+
+### SpringBoot
+Springboot 可以直接使用
+
+### SpringMvc 配置
 
 + java based config
   
@@ -104,243 +133,119 @@ public class SwaggerConfig {
 
 + controller
     ```java
-    @RestController
-    @RequestMapping("/api/appoint/")
-    @Api(value = "appoint",description = "预约 模块")
-    public class AppointAppController {
+    
+/**
+ * 类功能说明：注册用户 controller
+ */
 
-        @Autowired
-        private IAptAppointService appointService;
+@RestController
+@RequestMapping("/app")
+@Api(tags = {"用户接口"})
+public class CustomerAppController {
 
-        @Autowired
-        private Environment env;
+    /**
+     * 第三方登录 - 刷新
+     *
+     * @param token     QQ授权后的access_token 或 微信的 refresh_token 或 微博的 refresh_token
+     * @param loginType 1: QQ； 2: 微信； 3：微博
+     * @param phone 手机号码
+     * @param valid 校验码
+     * @return
+     */
+    @PostMapping(value = "/s/login/refresh")
+    @ApiOperation(value = "第三方登录 - 刷新", response = ThirdLoginToken.class,
+            notes = "刷新成功后 返回 Map {jwt: jwt token, accessToken, refreshToken} \n 成功后 在http header中添加 域: Authorization=jwt的值 ")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "token",  required = true, value = "授权后 QQ的 或 微信的 或 微博的 refresh_token"),
+        @ApiImplicitParam(name = "loginType", allowableValues = "1,2,3", dataType = "int", required = true, value = "第三方登陆类型  1: QQ； 2: 微信； 3：微博"),
+        @ApiImplicitParam(name = "phone", dataType = "int", value = "初次授权，需要绑定的 手机"),
+        @ApiImplicitParam(name = "valid", dataType = "int", value = "初次授权，需要绑定的 手机校验码")
+    })
+    public ResponseEntity<ThirdLoginToken> refresh(
+            @RequestParam String token,
+            @RequestParam int loginType,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) String valid
+        ) throws IOException {
 
-        /**
-        * logger
-        */
-        private final Logger logger = LoggerFactory.getLogger(AppointAppController.class);
-
-
-        /**
-        * 加载预约排班信息
-        *
-        * @return
-        */
-        @ApiImplicitParams({
-                @ApiImplicitParam(name = "doctCode", value = "医生code"),
-                @ApiImplicitParam(name = "deptCode", value = "科室code")
-        })
-        @ApiOperation(value = "预约排班信息",  notes="获取医生排班信息")
-        @RequestMapping(value = "loadSchedule", method = RequestMethod.POST)
-        public ComResultVo<UserEntity> loadSchedule(@RequestParam String doctCode, @RequestParam String deptCode) {
-
-            。。。
-            
-            return ComResultVo.returnList(list);
-        }
+        return thirdLogin(token, loginType, LOGIN_REFRESH.REFRESH.ordinal(), phone, valid);
     }
+
+    /**
+     * 获取用户信息
+     *
+     * @return
+     */
+    @GetMapping(value = "/customer")
+    @ApiOperation(value = "获取用户信息", authorizations = { @Authorization(value="apiKey") }, response = CustomerEntity.class)
+    public ResponseEntity<CustomerEntity> getCustomer(){
+        。。。
+
+        return ResponseEntity.ok(customer);
+    }
+
+    /**
+     * 绑定 qq, 微信，微博等
+     *
+     * @param token
+     * @param loginType
+     * @return
+     */
+    @PutMapping(value = "/customer/third")
+    @ApiOperation(value = "绑定 qq, 微信，微博等 ", response = ThirdLoginToken.class, authorizations = { @Authorization(value="apiKey") })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token",  required = true, value = "QQ授权后的access_token 或 微信的 authorization_code 或 微博的 authorization_code"),
+            @ApiImplicitParam(name = "loginType", allowableValues = "1,2,3", dataType = "int", required = true, value = "第三方登陆类型  1: QQ； 2: 微信； 3：微博")
+    })
+    public ResponseEntity updateCustomerThirdLogin(@RequestParam String token, @RequestParam int loginType) throws IOException {
+        ThirdLoginToken loginToken = new ThirdLoginToken();
+        ...
+
+
+        return ResponseEntity.ok(loginToken);
+    }
+
+
+
+
+
+}
+
     ```
 
 + entity
-UserEntity
+
     ```java
-    package com.xxxx.domain;
+    /**
+     * 第三方登陆返回 VO
+     */
+    @ApiModel
+    private class ThirdLoginToken {
 
-    import io.swagger.annotations.ApiModel;
-    import io.swagger.annotations.ApiModelProperty;
+        @ApiModelProperty(value = "jwt token, 获取后 在http header中添加 域: Authorization=jwt的值")
+        public String jwt;
 
-    import javax.persistence.*;
-    import javax.validation.constraints.NotNull;
+        @ApiModelProperty(value = "第三方授权的 access token")
+        public String accessToken;
 
-    @Entity
-    @ApiModel()
-    public class UserEntity extends BaseEntity {
+        @ApiModelProperty(value = "第三方授权的 refresh token")
+        public String refreshToken;
 
-        @Id
-        @TableGenerator(
-                name = "User_gen",
-                table = "t_com_id_generator_r",
-                pkColumnName = "seq_name",
-                pkColumnValue = "User_id",
-                valueColumnName = "seq_value",
-                allocationSize = 50
-        )
-        @GeneratedValue(
-                strategy = GenerationType.TABLE,
-                generator = "User_gen"
-        )
-        @ApiModelProperty(value = "用户ID", notes = "user's name xxxxxxxxxxxxxx")
-        private Long id;
+        @ApiModelProperty(value = "第三方授权的 openId")
+        public String openId;
 
-
-        /**
-        * 用户名称
-        */
-        @ApiModelProperty(value = "用户姓名", notes = "user's name xxxxxxxxxxxxxx")
-        @NotNull
-        private String name;
-
-        public Long getId() {
-            return id;
-        }
-
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
+        public ThirdLoginToken(String jwt, String accessToken, String refreshToken, String openId) {
+            this.jwt = jwt;
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
+            this.openId = openId;
         }
     }
     ```
-    ComResultVo
-    ```java
-    package com.xxx.domain;
 
-    import io.swagger.annotations.ApiModel;
-    import io.swagger.annotations.ApiModelProperty;
-    import org.springframework.data.domain.Page;
-
-    import java.io.Serializable;
-    import java.util.List;
-
-    @ApiModel()
-    public class ComResultVo<T> implements Serializable {
-
-            private static final long serialVersionUID = 176607880345671118L;
-            public static final int COUNT_ZERO = 0;
-            private boolean result = false;
-
-            @ApiModelProperty(value = "message ", notes = "user's name xxxxxxxxxxxxxx")
-            private String message;
-            private int status;
-            private long count = 0L;
-            private T entity;
-            private List<T> list;
-
-            public ComResultVo() {
-            }
-
-            public ComResultVo returnEntity(T entity) {
-                return createComResutVo(true, ComResultVo.Status.SUCCESS.getCode(), (String)null, (Long)null, entity, (List)null);
-            }
-
-            public ComResultVo returnList(List<T> data) {
-                return returnPagedList(data, data == null?null:Long.valueOf((long)data.size()));
-            }
-
-            public ComResultVo returnPagedList(List<T> data, Long count) {
-                return count != null && count.intValue() != 0?createComResutVo(true, ComResultVo.Status.SUCCESS.getCode(), (String)null, count, null, data):createComResutVo(true, ComResultVo.Status.SUCCESS.getCode(), "暂时没有相关的信息喔", count, null, data);
-            }
-
-            public ComResultVo returnPages(Page<T> data) {
-                return data.getTotalElements() == 0L?
-                        createComResutVo(true, ComResultVo.Status.SUCCESS.getCode(), "暂时没有相关的信息喔", Long.valueOf(data.getTotalElements()), null, data.getContent()):
-                        createComResutVo(true, ComResultVo.Status.SUCCESS.getCode(), (String)null, Long.valueOf(data.getTotalElements()), null, data.getContent());
-            }
-
-            public ComResultVo returnSuccessStatus() {
-                return createComResutVo(true, ComResultVo.Status.SUCCESS.getCode(), (String)null, (Long)null, null, (List)null);
-            }
-
-            public ComResultVo returnErrorMessage(String message) {
-                return createComResutVo(false, ComResultVo.Status.BAD_REQUEST.getCode(), message, (Long)null, null, null);
-            }
-
-            public ComResultVo returnStatus(boolean result, int status, String message) {
-                return createComResutVo(result, status, message, (Long)null, null, null);
-            }
-
-            public ComResultVo returnALL(boolean result, int status, String message, long count, T entity, List<T> list) {
-                return createComResutVo(result, status, message, Long.valueOf(count), entity, list);
-            }
-
-            private ComResultVo createComResutVo(boolean result, int status, String message, Long count, T entity, List<T> list) {
-                ComResultVo vo = new ComResultVo();
-                vo.result = result;
-                vo.status = status;
-                if(message == null) {
-                    if(result) {
-                        vo.message = ComResultVo.Status.SUCCESS.getDescription();
-                    } else {
-                        vo.message = "操作失败";
-                    }
-                } else {
-                    vo.message = message;
-                }
-
-                if(count == null) {
-                    if(null != list) {
-                        vo.count = (long)list.size();
-                    } else {
-                        vo.count = 0L;
-                    }
-                } else {
-                    vo.count = count.longValue();
-                }
-
-                vo.entity = entity;
-                vo.list = list;
-                return vo;
-            }
-
-            public boolean isResult() {
-                return this.result;
-            }
-
-            public void setResult(boolean result) {
-                this.result = result;
-            }
-
-            public String getMessage() {
-                return this.message;
-            }
-
-            public void setMessage(String message) {
-                this.message = message;
-            }
-
-            public int getStatus() {
-                return this.status;
-            }
-
-            public void setStatus(int status) {
-                this.status = status;
-            }
-
-            public long getCount() {
-                return this.count;
-            }
-
-            public void setCount(long count) {
-                this.count = count;
-            }
-
-            public T getEntity() {
-                return this.entity;
-            }
-
-            public void setEntity(T entity) {
-                this.entity = entity;
-            }
-
-            public List<T> getList() {
-                return this.list;
-            }
-
-            public void setList(List<T> list) {
-                this.list = list;
-            }
-    }
-    ```
-
-+ @Api:标志这个类为Swagger资源
-+ @ApiImplicitParam:对单个参数进行说明,其中dataType一定为小写
-+ @ApiOperation:描述了一种操作或通常针对特定的路径的HTTP方法。
++ @Api:标志这个类为Swagger资源，根据config， 没标注的不会生成 swagger 的接口文档
++ @ApiImplicitParams，@ApiImplicitParam: 对参数进行说明, 其中dataType一定为小写； allowableValues 可限制 合法值得列表； required 指定该参数是否必须
++ @ApiOperation:描述了一种操作或通常针对特定的路径的HTTP方法。 response 指定返回值类型；authorizations 指定改接口的认证条件， apiKey 需要和 config的一致；
 + @ApiModel: 描述一个实体
 + @ApiModelProperty：描述一个字段
 
@@ -353,6 +258,10 @@ UserEntity
 
 达到如下效果
 ![](/images/springfox.png)
+
+
+### 接口认证
+`Authorize` 按钮， 填入合法的认证值，模拟授权。
 
 ## 最终结果
 打开 [http://localhost:8080/project_name/swagger-ui.html](http://localhost:8080/swagger-ui.html#) ,project_name表示你启动项目的名称,如果你以根目录启动则没有project_name,当你看到如下界面就表示配置成功了
