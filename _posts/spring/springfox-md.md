@@ -21,7 +21,7 @@ categories: spring
 末了，还有个稍重量级竞品 [RAP(阿里妈妈出品) ](https://github.com/thx/rap2-delos) ， 感兴趣的可以去玩玩。
 
 *更新历史*
-+2018-11-04: 
++2018-11-04: 增加swagger注解具体说明
 
 <!-- more -->
 
@@ -257,8 +257,8 @@ public class CustomerAppController {
 + controller 返回值 `ComResultVo<UserEntity>` 一定要 标明泛型的具体值 `UserEntity`
 
 达到如下效果
-![](/images/springfox.png)
-
+![](/images/swagger_model.png)
+![](/images/swagger_model2.png)
 
 ### 接口认证
 `Authorize` 按钮， 填入合法的认证值，模拟授权。
