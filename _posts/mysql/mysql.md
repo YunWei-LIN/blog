@@ -38,7 +38,7 @@ which mysql
 
 # 2 初始化数据文件
 cd /usr/bin/
-mysqld --initialize --user=mysql --datadir=/home/data//mysql/data
+mysqld --initialize --user=mysql --datadir=/data/mysql/data
 
 ```
 
