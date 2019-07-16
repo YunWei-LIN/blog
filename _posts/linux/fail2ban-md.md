@@ -14,7 +14,8 @@ categories: linux
 使用 fail2ban 防御服务器的暴力破解攻击， ssh，nginx 服务为例。
 
 变更历史
-* Fail2Ban v0.9.7 ssh filter
+* 2019-7-16 Fail2Ban v0.9.7 ssh filter
+
 
 
 <!-- more -->
@@ -62,7 +63,7 @@ yum install fail2ban-firewalld
 enabled = true
 maxretry = 3 # 尝试次数
 bantime = 7200 # 禁止访问时间（秒）
-
+findtime = 600
 ```
 
 如果你使用用户密码登录，以上配置就可以了。
@@ -78,6 +79,10 @@ Fail2Ban v0.9.7 时 `^%(__prefix_line_sl)sConnection closed by <HOST>.*%(__suff)
 ```
 
 ```sh
+# Fail3Ban filter for openssh
+#
+# If you want to protect OpenSSH from being bruteforced by password
+# authentication then get public key authentication working before disabling
 # PasswordAuthentication in sshd_config.
 #
 #
@@ -90,28 +95,58 @@ Fail2Ban v0.9.7 时 `^%(__prefix_line_sl)sConnection closed by <HOST>.*%(__suff)
 # common.local
 before = common.conf
 
-[Definition]
+[DEFAULT]
 
 _daemon = sshd
 
-failregex = ^%(__prefix_line)s(?:error: PAM: )?[aA]uthentication (?:failure|error|failed) for .* from <HOST>( via \S+)?\s*$
-            ^%(__prefix_line)s(?:error: PAM: )?User not known to the underlying authentication module for .* from <HOST>\s*$
-            ^%(__prefix_line)sFailed \S+ for (?P<cond_inv>invalid user )?(?P<user>(?P<cond_user>\S+)|(?(cond_inv)(?:(?! from ).)*?|[^:]+)) from <HOST>(?: port \d+)?(?: ssh\d*)?(?(cond_user):|(?:(?:(?! from ).)*)$)
-            ^%(__prefix_line)sROOT LOGIN REFUSED.* FROM <HOST>\s*$
-            ^%(__prefix_line)s[iI](?:llegal|nvalid) user .*? from <HOST>(?: port \d+)?\s*$
-            ^%(__prefix_line)sUser .+ from <HOST> not allowed because not listed in AllowUsers\s*$
-            ^%(__prefix_line)sUser .+ from <HOST> not allowed because listed in DenyUsers\s*$
-            ^%(__prefix_line)sUser .+ from <HOST> not allowed because not in any group\s*$
-            ^%(__prefix_line)srefused connect from \S+ \(<HOST>\)\s*$
-            ^%(__prefix_line)s(?:error: )?Received disconnect from <HOST>: 3: .*: Auth fail(?: \[preauth\])?$
-            ^%(__prefix_line)sUser .+ from <HOST> not allowed because a group is listed in DenyGroups\s*$
-            ^%(__prefix_line)sUser .+ from <HOST> not allowed because none of user's groups are listed in AllowGroups\s*$
-            ^(?P<__prefix>%(__prefix_line)s)User .+ not allowed because account is locked<SKIPLINES>(?P=__prefix)(?:error: )?Received disconnect from <HOST>: 11: .+ \[preauth\]$
-            ^(?P<__prefix>%(__prefix_line)s)Disconnecting: Too many authentication failures for .+? \[preauth\]<SKIPLINES>(?P=__prefix)(?:error: )?Connection closed by <HOST> \[preauth\]$
-            ^(?P<__prefix>%(__prefix_line)s)Connection from <HOST> port \d+(?: on \S+ port \d+)?<SKIPLINES>(?P=__prefix)Disconnecting: Too many authentication failures for .+? \[preauth\]$
-            ^%(__prefix_line)s(error: )?maximum authentication attempts exceeded for .* from <HOST>(?: port \d*)?(?: ssh\d*)? \[preauth\]$
-            ^%(__prefix_line)spam_unix\(sshd:auth\):\s+authentication failure;\s*logname=\S*\s*uid=\d*\s*euid=\d*\s*tty=\S*\s*ruser=\S*\s*rhost=<HOST>\s.*$
+# optional prefix (logged from several ssh versions) like "error: ", "error: PAM: " or "fatal: "
+__pref = (?:(?:error|fatal): (?:PAM: )?)?
+# optional suffix (logged from several ssh versions) like " [preauth]"
+__suff = (?: \[preauth\])?\s*
+__on_port_opt = (?: port \d+)?(?: on \S+(?: port \d+)?)?
+
+# single line prefix:
+__prefix_line_sl = %(__prefix_line)s%(__pref)s
+# multi line prefixes (for first and second lines):
+__prefix_line_ml1 = (?P<__prefix>%(__prefix_line)s)%(__pref)s
+__prefix_line_ml2 = %(__suff)s$<SKIPLINES>^(?P=__prefix)%(__pref)s
+
+mode = %(normal)s
+
+normal = ^%(__prefix_line_sl)s[aA]uthentication (?:failure|error|failed) for .* from <HOST>( via \S+)?\s*%(__suff)s$
+         ^%(__prefix_line_sl)sUser not known to the underlying authentication module for .* from <HOST>\s*%(__suff)s$
+         ^%(__prefix_line_sl)sFailed \S+ for (?P<cond_inv>invalid user )?(?P<user>(?P<cond_user>\S+)|(?(cond_inv)(?:(?! from ).)*?|[^:]+)) from <HOST>%(__on_port_opt)s(?: ssh\d*)?(?(cond_user): |(?:(?:(?! from ).)*)$)
+         ^%(__prefix_line_sl)sROOT LOGIN REFUSED.* FROM <HOST>\s*%(__suff)s$
+         ^%(__prefix_line_sl)s[iI](?:llegal|nvalid) user .*? from <HOST>%(__on_port_opt)s\s*$
+         ^%(__prefix_line_sl)sUser .+ from <HOST> not allowed because not listed in AllowUsers\s*%(__suff)s$
+         ^%(__prefix_line_sl)sUser .+ from <HOST> not allowed because listed in DenyUsers\s*%(__suff)s$
+         ^%(__prefix_line_sl)sUser .+ from <HOST> not allowed because not in any group\s*%(__suff)s$
+         ^%(__prefix_line_sl)srefused connect from \S+ \(<HOST>\)\s*%(__suff)s$
+         ^%(__prefix_line_sl)sReceived disconnect from <HOST>%(__on_port_opt)s:\s*3: .*: Auth fail%(__suff)s$
+         ^%(__prefix_line_sl)sUser .+ from <HOST> not allowed because a group is listed in DenyGroups\s*%(__suff)s$
+         ^%(__prefix_line_sl)sUser .+ from <HOST> not allowed because none of user's groups are listed in AllowGroups\s*%(__suff)s$
+         ^%(__prefix_line_sl)spam_unix\(sshd:auth\):\s+authentication failure;\s*logname=\S*\s*uid=\d*\s*euid=\d*\s*tty=\S*\s*ruser=\S*\s*rhost=<HOST>\s.*%(__suff)s$
+         ^%(__prefix_line_sl)s(error: )?maximum authentication attempts exceeded for .* from <HOST>%(__on_port_opt)s(?: ssh\d*)? \[preauth\]$
+         ^%(__prefix_line_ml1)sUser .+ not allowed because account is locked%(__prefix_line_ml2)sReceived disconnect from <HOST>: 11: .+%(__suff)s$
+         ^%(__prefix_line_ml1)sDisconnecting: Too many authentication failures for .+?%(__prefix_line_ml2)sConnection closed by <HOST>%(__suff)s$
+         ^%(__prefix_line_ml1)sConnection from <HOST>%(__on_port_opt)s%(__prefix_line_ml2)sDisconnecting: Too many authentication failures for .+%(__suff)s$
             ^%(__prefix_line_sl)sConnection closed by <HOST>.*%(__suff)s$  ##增加在这里
+            ^%(__prefix_line_sl)sDisconnected from <HOST>.*%(__suff)s$ ##增加在这里, 可根据情况自己增加
+
+
+
+ddos =   ^%(__prefix_line_sl)sDid not receive identification string from <HOST>%(__suff)s$
+         ^%(__prefix_line_sl)sReceived disconnect from <HOST>%(__on_port_opt)s:\s*14: No supported authentication methods available%(__suff)s$
+         ^%(__prefix_line_sl)sUnable to negotiate with <HOST>%(__on_port_opt)s: no matching (?:cipher|key exchange method) found.
+         ^%(__prefix_line_ml1)sConnection from <HOST>%(__on_port_opt)s%(__prefix_line_ml2)sUnable to negotiate a (?:cipher|key exchange method)%(__suff)s$
+         ^%(__prefix_line_ml1)sSSH: Server;Ltype: (?:Authname|Version|Kex);Remote: <HOST>-\d+;[A-Z]\w+:.*%(__prefix_line_ml2)sRead from socket failed: Connection reset by peer%(__suff)s$
+
+aggressive = %(normal)s
+             %(ddos)s
+
+[Definition]
+
+failregex = %(mode)s
 
 ignoreregex =
 
@@ -130,9 +165,11 @@ journalmatch = _SYSTEMD_UNIT=sshd.service + _COMM=sshd
 #   matched away first.
 #
 # Author: Cyril Jaquier, Yaroslav Halchenko, Petr Voralek, Daniel Black
+
+
 ```
 
-## 自定义服务
+## 自定义服务(NGINX)
 以下检查 nginx 服务 400,404,500 错误状态为例
 
 
