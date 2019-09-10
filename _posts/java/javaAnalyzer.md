@@ -116,7 +116,7 @@ table th:first-of-type {
 + FGCT：老年代垃圾回收消耗时间
 + GCT：垃圾回收消耗总时间
 
-更多可参考[java高分局之jstat命令使用](https://blog.csdn.net/maosijunzi/article/details/46049117)
+更多可参考[jstat](https://app.yinxiang.com/shard/s70/nl/17973191/9a8fdbd4-6a6b-46fb-8c70-babd70a02fcb) [java高分局之jstat命令使用](https://blog.csdn.net/maosijunzi/article/details/46049117)
 
 
 ## jinfo
